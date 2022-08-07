@@ -1,48 +1,83 @@
 <script lang="ts">
-  import { CLASSES } from '../consts'
+  // state
   import createCountdown from '../store/factory/countdown'
+  // actions
   import useDraw from '../utils/actions/useDraw'
-  let start: [number, number], deltas: [number, number][]
+  // utils
+  import { CLASSES, colors } from '../consts'
+  import { hideCursor, showCursor } from '../utils/appwindow'
+  import pickRandom from '../utils/pickRandom'
+
+  const color = pickRandom(colors)
+  let start: [number, number] | null, deltas: [number, number][]
   let paths: string[] = []
+
+  const countDown = createCountdown(2, 0.02, 3)
+  const opacity = countDown.value
+
   $: path = start ? `M ${start.join(',')} l 0,0 ${deltas.map((d) => `l ${d.join(',')}`).join(' ')}` : ''
-  let opacity = createCountdown(1, 0.9, 0.1)
   $: {
     if ($opacity < 0) {
       start = null
       paths = []
     }
   }
-  const color = `hsl(${Math.floor(Math.random() * 360)}, 100%, 70%)`
 </script>
 
 <div
   id="canvas"
+  style:--color={color}
   use:useDraw={{
-    throttle: 0,
+    wait: 50,
     cb: (_type, _start, _deltas) => {
-      start = _start
-      deltas = _deltas
-      if (_type === 'temp') opacity = createCountdown(1, 0.02, 3)
-      if (_type === 'done') {
-        paths = paths.concat(path)
-        console.log(paths)
+      switch (_type) {
+        case 'start': {
+          countDown.reset()
+          hideCursor()
+          // NO break here
+        }
+
+        case 'draw': {
+          start = _start
+          deltas = _deltas
+          break
+        }
+
+        case 'done': {
+          paths = paths.concat(path)
+          start = null
+          showCursor()
+          countDown.start()
+          break
+        }
+
+        default:
+          break
       }
     },
   }}
 >
   <svg
     class={CLASSES.fullSize}
-    stroke={color}
-    stroke-width="10"
+    stroke="rgb( var(--color) )"
+    stroke-width="4"
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
     opacity={$opacity}
   >
     {#each paths as p, i (i)}
+      <path d={p} stroke-width="12" opacity={0.2} />
+      <path d={p} stroke-width="8" opacity={0.33} />
       <path d={p} />
+      <path d={p} stroke-width="2" opacity={0.4} stroke="#ffffff" />
     {/each}
-    <path d={path} />
+    {#if start}
+      <path d={path} stroke-width="12" opacity={0.2} />
+      <path d={path} stroke-width="8" opacity={0.33} />
+      <path d={path} />
+      <path d={path} stroke-width="2" opacity={0.4} stroke="#ffffff" />
+    {/if}
   </svg>
 </div>
 
@@ -51,10 +86,8 @@
     position: fixed;
     inset: 0;
     background-color: transparent;
-    box-shadow: inset 0px 0px 0px 8px #ffffff77,
-      inset 0px 0px 0px 13px #ffffff77,
-      inset 0px 0px 0px 16px #ffffff77,
-      inset 0px 0px 0px 18px #ffffff77;
+    box-shadow: inset 0px 0px 0px 5px rgba(255, 255, 255, 1), inset 0px 0px 0px 20px rgba(var(--color), 0.33), inset 0px 0px 0px 15px rgba(var(--color), 0.33),
+      inset 0px 0px 0px 10px rgba(255, 255, 255, 0.33);
     cursor: crosshair;
   }
 </style>

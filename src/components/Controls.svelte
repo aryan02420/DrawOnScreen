@@ -1,12 +1,16 @@
 <script lang="ts">
-  import { Move, Brush, X } from 'lucide-svelte'
+  // components
+  import { GripVertical, Pencil, X } from 'lucide-svelte'
   import Box from './Box.svelte'
   import Button from './Button.svelte'
-  import { CLASSES } from '../consts'
-  import { closeWindow } from '../utils/appwindow'
+  // state
   import { isQuietMode, isDrawMode, position } from '../store/state'
   import { toggleMode } from '../store/mutations'
+  // actions
   import useDrag from '../utils/actions/useDrag'
+  // utils
+  import { CLASSES } from '../consts'
+  import { closeWindow } from '../utils/appwindow'
 </script>
 
 <div
@@ -24,7 +28,7 @@
     data-drag={$isDrawMode ? true : null}
     class={CLASSES.size40}
   >
-    <Move size={20} color="#313C44" opacity={0.3} />
+    <GripVertical size={20} color="#313C44" opacity={0.3} />
   </Box>
   <Button
     onClick={() => {
@@ -33,7 +37,7 @@
     class={CLASSES.size40}
     aria-pressed={$isDrawMode}
   >
-    <Brush size={20} color="#313C44" />
+    <Pencil size={20} color="#313C44" />
   </Button>
   <Button
     onClick={() => {

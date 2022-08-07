@@ -1,6 +1,6 @@
+import type { Action } from 'svelte/action'
 import { offsetPosition } from '../../store/mutations'
 
-import type { Action } from 'svelte/action'
 
 const useDrag: Action = (node) => {
   let prevX: number, prevY: number

@@ -1,29 +1,35 @@
 import type { Action } from 'svelte/action'
+import throttle from 'lodash.throttle'
 
 interface ActionParams {
-  throttle: number
-  cb: (type: 'temp' | 'done', start: [number, number], deltas: [number, number][]) => void
+  wait?: number
+  cb: (type: 'start' | 'draw' | 'done', start: [number, number], deltas: [number, number][]) => void
 }
 
-const useDrag: Action<HTMLElement, ActionParams> = (node, { throttle, cb }) => {
+const useDrag: Action<HTMLElement, ActionParams> = (node, { wait = 16, cb }) => {
   let prevX: number, prevY: number
   let start: [number, number], deltas: [number, number][]
+
+  const throttledMouseMove = throttle(mouseMove, wait, {
+    leading: true,
+    trailing: true,
+  })
 
   function mouseDown(e: MouseEvent) {
     e.preventDefault()
     e.stopPropagation()
-    document.addEventListener('mousemove', mouseMove)
+    document.addEventListener('mousemove', throttledMouseMove)
     document.addEventListener('mouseup', mouseUp)
     start = [e.clientX, e.clientY]
     deltas = []
-    cb('temp', start, deltas)
+    cb('start', start, deltas)
     prevX = e.clientX
     prevY = e.clientY
   }
 
   function mouseUp(e: MouseEvent) {
     document.removeEventListener('mouseup', mouseUp)
-    document.removeEventListener('mousemove', mouseMove)
+    document.removeEventListener('mousemove', throttledMouseMove)
     cb('done', start, deltas)
   }
 
@@ -31,7 +37,7 @@ const useDrag: Action<HTMLElement, ActionParams> = (node, { throttle, cb }) => {
     const x = e.clientX - prevX
     const y = e.clientY - prevY
     deltas.push([x, y])
-    cb('temp', start, deltas)
+    cb('draw', start, deltas)
     prevX = e.clientX
     prevY = e.clientY
   }
