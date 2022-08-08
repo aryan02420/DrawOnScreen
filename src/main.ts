@@ -1,4 +1,5 @@
 import { open } from '@tauri-apps/api/shell';
+import { register } from '@tauri-apps/api/globalShortcut';
 import Mousetrap from 'mousetrap'
 import App from './App.svelte'
 import { toggleMode } from './store/mutations'
@@ -19,5 +20,9 @@ Mousetrap.bind('d', () => {
 Mousetrap.bind('mod+w', () => {
   closeWindow()
 })
+
+register('CommandOrControl+Shift+D', () => {
+  toggleMode()
+});
 
 export default app

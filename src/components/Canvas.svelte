@@ -2,23 +2,31 @@
   // state
   import createCountdown from '../store/factory/countdown'
   // actions
-  import useDraw from '../utils/actions/useDraw'
+  import useDrag, { ActionCallbackType } from '../actions/useDrag'
   // utils
   import { CLASSES, colors } from '../consts'
   import { hideCursor, showCursor } from '../utils/appwindow'
   import pickRandom from '../utils/pickRandom'
+  import fastLength from '../utils/fastDistance'
+  import angle from '../utils/angle'
 
   const color = pickRandom(colors)
-  let start: [number, number] | null, deltas: [number, number][]
+  let start: [number, number] | null
+  let deltas: {
+    vec: [number, number]
+    len: number
+    angle: number
+  }[]
   let paths: string[] = []
 
   const countDown = createCountdown(2, 0.02, 3)
   const opacity = countDown.value
 
-  $: path = start ? `M ${start.join(',')} l 0,0 ${deltas.map((d) => `l ${d.join(',')}`).join(' ')}` : ''
+  $: path = start ? `M ${start.join(',')} l 0,0 ${deltas.map((d) => `l ${d.vec.join(',')}`).join(' ')}` : ''
   $: {
     if ($opacity < 0) {
       start = null
+      deltas = []
       paths = []
     }
   }
@@ -27,27 +35,58 @@
 <div
   id="canvas"
   style:--color={color}
-  use:useDraw={{
-    wait: 50,
-    cb: (_type, _start, _deltas) => {
-      switch (_type) {
-        case 'start': {
+  use:useDrag={{
+    wait: 10,
+    preventDefault: true,
+    stopPropagation: true,
+    callback: ({ type, payload }) => {
+      switch (type) {
+        case ActionCallbackType.Start: {
           countDown.reset()
+          start = [payload.x, payload.y]
+          deltas = []
           hideCursor()
-          // NO break here
-        }
-
-        case 'draw': {
-          start = _start
-          deltas = _deltas
           break
         }
 
-        case 'done': {
+        case ActionCallbackType.Move: {
+          const lastDelta = deltas.length ? deltas[deltas.length - 1] : null
+          const delta = {
+            vec: [payload.dx, payload.dy],
+            len: fastLength(payload.dx, payload.dy),
+            angle: angle([payload.dx, payload.dy]),
+          }
+          if (lastDelta === null) {
+            // @ts-ignore
+            deltas = deltas.concat([delta])
+            return
+          }
+          const nvec = [lastDelta.vec[0] + delta.vec[0], lastDelta.vec[1] + delta.vec[1]]
+          // @ts-ignore
+          const nlen = fastLength(...nvec)
+          // @ts-ignore
+          const ang = angle(delta.vec, lastDelta.vec)
+          if (nlen < 10 || ang < 0.2) {
+            deltas[deltas.length - 1] = {
+              // @ts-ignore
+              vec: nvec,
+              len: nlen,
+              // @ts-ignore
+              angle: angle(nvec),
+            }
+            return
+          }
+          // @ts-ignore
+          deltas = deltas.concat([delta])
+          break
+        }
+
+        case ActionCallbackType.End: {
           paths = paths.concat(path)
           start = null
-          showCursor()
+          deltas = []
           countDown.start()
+          showCursor()
           break
         }
 
@@ -86,8 +125,8 @@
     position: fixed;
     inset: 0;
     background-color: transparent;
-    box-shadow: inset 0px 0px 0px 5px rgba(255, 255, 255, 1), inset 0px 0px 0px 20px rgba(var(--color), 0.33), inset 0px 0px 0px 15px rgba(var(--color), 0.33),
-      inset 0px 0px 0px 10px rgba(255, 255, 255, 0.33);
+    box-shadow: inset 0px 0px 0px 5px rgba(255, 255, 255, 1), inset 0px 0px 0px 20px rgba(var(--color), 0.33),
+      inset 0px 0px 0px 15px rgba(var(--color), 0.33), inset 0px 0px 0px 10px rgba(255, 255, 255, 0.33);
     cursor: crosshair;
   }
 </style>

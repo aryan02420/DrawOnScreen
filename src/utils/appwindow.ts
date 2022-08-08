@@ -16,8 +16,17 @@ export const unmaximizeWindow = async () => {
   await appWindow.unmaximize()
 }
 
-export const getWindowPosition = async () => {
-  return await appWindow.innerPosition()
+export const fullscreenWindow = async () => {
+  await appWindow.setFullscreen(true)
+}
+
+export const unfullscreenWindow = async () => {
+  await appWindow.setFullscreen(false)
+}
+
+export const getWindowPosition = async (): Promise<Position> => {
+  const pos = await appWindow.innerPosition()
+  return [pos.x, pos.y]
 }
 
 export const setWindowPosition = async ([x, y]: Position) => {

@@ -1,16 +1,16 @@
-import { get } from "svelte/store"
-import { AppMode, appMode, Position, position } from "./state"
-import { getWindowPosition, maximizeWindow, setWindowPosition, unmaximizeWindow } from "../utils/appwindow"
-
+import { get } from 'svelte/store'
+import { AppMode, appMode, position } from './state'
+import type { Position } from './state'
+import { getWindowPosition, fullscreenWindow, setWindowPosition, unfullscreenWindow } from '../utils/appwindow'
 
 export function toggleMode() {
   appMode.update((m) => {
     if (m === AppMode.quiet) {
       setPosition(null)
-      maximizeWindow()
+      fullscreenWindow()
       return AppMode.draw
     }
-    unmaximizeWindow().then(() => {
+    unfullscreenWindow().then(() => {
       setWindowPosition(get(position))
     })
     return AppMode.quiet
@@ -22,11 +22,12 @@ export function setPosition(p: Position | null) {
     position.set(p)
     return
   }
-  getWindowPosition().then(pos => {
-    position.set([pos.x, pos.y])
+
+  getWindowPosition().then((pos) => {
+    position.set(pos)
   })
 }
 
 export function offsetPosition(p: Position) {
-  position.update(pos => [pos[0] + p[0], pos[1] + p[1]])
+  position.update((pos) => [pos[0] + p[0], pos[1] + p[1]])
 }
