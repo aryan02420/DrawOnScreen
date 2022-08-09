@@ -21,18 +21,16 @@ type ActionCallbackParams =
       payload: { x: number; y: number }
     }
 
-interface ActionParams {
+interface ActionOptions {
   wait?: number
   condition?: (event: MouseEvent) => boolean | null
   preventDefault?: boolean
   stopPropagation?: boolean
-  callback: (params: ActionCallbackParams) => void
+  callback?: (params: ActionCallbackParams) => void
 }
 
-const useDrag: Action<HTMLElement, ActionParams> = (
-  node,
-  { wait = 16, condition = null, preventDefault = true, stopPropagation = true, callback }
-) => {
+const useDrag: Action<HTMLElement, ActionOptions> = (node, options = {}) => {
+  const { wait = 16, condition = null, preventDefault = true, stopPropagation = true, callback } = options
   let prevX: number, prevY: number
 
   const throttledMouseMove = throttle(mouseMove, wait, {
@@ -46,7 +44,7 @@ const useDrag: Action<HTMLElement, ActionParams> = (
       if (stopPropagation) e.stopPropagation()
       document.addEventListener('mousemove', throttledMouseMove)
       document.addEventListener('mouseup', mouseUp)
-      callback({
+      callback?.({
         type: ActionCallbackType.Start,
         payload: {
           x: e.clientX,
@@ -61,7 +59,7 @@ const useDrag: Action<HTMLElement, ActionParams> = (
   function mouseUp(e: MouseEvent) {
     document.removeEventListener('mousemove', throttledMouseMove)
     document.removeEventListener('mouseup', mouseUp)
-    callback({
+    callback?.({
       type: ActionCallbackType.End,
       payload: {
         x: e.clientX,
@@ -73,7 +71,7 @@ const useDrag: Action<HTMLElement, ActionParams> = (
   function mouseMove(e: MouseEvent) {
     const dx = e.clientX - prevX
     const dy = e.clientY - prevY
-    callback({
+    callback?.({
       type: ActionCallbackType.Move,
       payload: {
         x: e.clientX,

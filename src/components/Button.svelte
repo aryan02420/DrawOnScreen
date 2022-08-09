@@ -1,5 +1,6 @@
 <script lang="ts">
-  export let onClick: (...args: any[]) => any | undefined = undefined
+  import { noop } from '../consts'
+  export let onClick: (...args: any[]) => any = noop
 </script>
 
 <button on:click|stopPropagation={onClick} {...$$restProps}><slot /></button>

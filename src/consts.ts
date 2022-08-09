@@ -19,3 +19,5 @@ export const colors = [
   '64, 255, 220',
   '64, 194, 255',
 ]
+
+export const noop = () => {}
