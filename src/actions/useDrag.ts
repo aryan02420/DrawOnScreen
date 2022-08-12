@@ -23,7 +23,7 @@ type ActionCallbackParams =
 
 interface ActionOptions {
   wait?: number
-  condition?: (event: MouseEvent) => boolean | null
+  condition?: (event: MouseEvent) => boolean
   preventDefault?: boolean
   stopPropagation?: boolean
   callback?: (params: ActionCallbackParams) => void

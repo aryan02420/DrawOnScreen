@@ -7,26 +7,23 @@
   import { CLASSES, colors } from '../consts'
   import { hideCursor, showCursor } from '../utils/appwindow'
   import pickRandom from '../utils/pickRandom'
-  import fastLength from '../utils/fastDistance'
-  import angle from '../utils/angle'
+  import { Path } from '../utils/makePath'
 
   const color = pickRandom(colors)
-  let start: [number, number] | null
-  let deltas: {
-    vec: [number, number]
-    len: number
-    angle: number
-  }[]
-  let paths: string[] = []
+  let currentPath: Path | null = null
+  let paths: {
+    d: string
+    color?: string
+    opacity?: number
+    created: number
+  }[] = []
 
   const countDown = createCountdown(2, 0.02, 3)
   const opacity = countDown.value
 
-  $: path = start ? `M ${start.join(',')} l 0,0 ${deltas.map((d) => `l ${d.vec.join(',')}`).join(' ')}` : ''
   $: {
     if ($opacity < 0) {
-      start = null
-      deltas = []
+      currentPath = null
       paths = []
     }
   }
@@ -39,52 +36,29 @@
     wait: 10,
     preventDefault: true,
     stopPropagation: true,
+    condition: (e) => e.button === 0,
     callback: ({ type, payload }) => {
       switch (type) {
         case ActionCallbackType.Start: {
           countDown.reset()
-          start = [payload.x, payload.y]
-          deltas = []
+          currentPath = new Path([payload.x, payload.y])
           hideCursor()
           break
         }
 
         case ActionCallbackType.Move: {
-          const lastDelta = deltas.length ? deltas[deltas.length - 1] : null
-          const delta = {
-            vec: [payload.dx, payload.dy],
-            len: fastLength(payload.dx, payload.dy),
-            angle: angle([payload.dx, payload.dy]),
-          }
-          if (lastDelta === null) {
-            // @ts-ignore
-            deltas = deltas.concat([delta])
-            return
-          }
-          const nvec = [lastDelta.vec[0] + delta.vec[0], lastDelta.vec[1] + delta.vec[1]]
-          // @ts-ignore
-          const nlen = fastLength(...nvec)
-          // @ts-ignore
-          const ang = angle(delta.vec, lastDelta.vec)
-          if (nlen < 10 || ang < 0.2) {
-            deltas[deltas.length - 1] = {
-              // @ts-ignore
-              vec: nvec,
-              len: nlen,
-              // @ts-ignore
-              angle: angle(nvec),
-            }
-            return
-          }
-          // @ts-ignore
-          deltas = deltas.concat([delta])
+          currentPath?.draw([payload.dx, payload.dy])
+          currentPath = currentPath
           break
         }
 
         case ActionCallbackType.End: {
-          paths = paths.concat(path)
-          start = null
-          deltas = []
+          paths = paths.concat([{
+            d: currentPath?.getSVGPath() || '',
+            color: color,
+            created: Date.now()
+          }])
+          currentPath = null
           countDown.start()
           showCursor()
           break
@@ -106,16 +80,21 @@
     opacity={$opacity}
   >
     {#each paths as p, i (i)}
-      <path d={p} stroke-width="12" opacity={0.2} />
-      <path d={p} stroke-width="8" opacity={0.33} />
-      <path d={p} />
-      <path d={p} stroke-width="2" opacity={0.4} stroke="#ffffff" />
+      <g style:--color={p.color} stroke="rgb( var(--color) )" opacity={p.opacity}>
+        <path d={p.d} stroke-width="12" opacity={0.2} />
+        <path d={p.d} stroke-width="8" opacity={0.33} />
+        <path d={p.d} />
+        <path d={p.d} stroke-width="2" opacity={0.4} stroke="#ffffff" />
+      </g>
     {/each}
-    {#if start}
-      <path d={path} stroke-width="12" opacity={0.2} />
-      <path d={path} stroke-width="8" opacity={0.33} />
-      <path d={path} />
-      <path d={path} stroke-width="2" opacity={0.4} stroke="#ffffff" />
+    {#if currentPath}
+      {@const d = currentPath.getSVGPath()}
+      <g>
+        <path d={d} stroke-width="12" opacity={0.2} />
+        <path d={d} stroke-width="8" opacity={0.33} />
+        <path d={d} />
+        <path d={d} stroke-width="2" opacity={0.4} stroke="#ffffff" />
+      </g>
     {/if}
   </svg>
 </div>
