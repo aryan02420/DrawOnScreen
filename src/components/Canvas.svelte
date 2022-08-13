@@ -3,30 +3,37 @@
   import createCountdown from '../store/factory/countdown'
   // actions
   import useDrag, { ActionCallbackType } from '../actions/useDrag'
+  import useAnimationFrame from '../actions/useAnimationFrame'
   // utils
   import { CLASSES, colors } from '../consts'
   import { hideCursor, showCursor } from '../utils/appwindow'
   import pickRandom from '../utils/pickRandom'
   import { Path } from '../utils/makePath'
 
+  //types
+  const enum DisappearType {
+    Never,
+    Group,
+    Independent,
+    Instant,
+  }
+
+  // props
+  export let disappear: DisappearType = DisappearType.Group
+
   const color = pickRandom(colors)
   let currentPath: Path | null = null
   let paths: {
     d: string
-    color?: string
-    opacity?: number
-    created: number
+    color: string
+    opacity: number
   }[] = []
 
-  const countDown = createCountdown(2, 0.02, 3)
-  const opacity = countDown.value
-
-  $: {
-    if ($opacity < 0) {
-      currentPath = null
-      paths = []
-    }
-  }
+  const sustainDuration = 1000
+  const decayDuration = 2000
+  $: totalDuration = sustainDuration + decayDuration
+  $: startOpacity = totalDuration / decayDuration
+  $: opactiyPerMS = startOpacity / totalDuration
 </script>
 
 <div
@@ -40,7 +47,6 @@
     callback: ({ type, payload }) => {
       switch (type) {
         case ActionCallbackType.Start: {
-          countDown.reset()
           currentPath = new Path([payload.x, payload.y])
           hideCursor()
           break
@@ -53,13 +59,14 @@
         }
 
         case ActionCallbackType.End: {
-          paths = paths.concat([{
-            d: currentPath?.getSVGPath() || '',
-            color: color,
-            created: Date.now()
-          }])
+          paths = paths.concat([
+            {
+              d: currentPath?.getSVGPath() || '',
+              color: color,
+              opacity: startOpacity,
+            },
+          ])
           currentPath = null
-          countDown.start()
           showCursor()
           break
         }
@@ -69,18 +76,42 @@
       }
     },
   }}
+  use:useAnimationFrame={(dt) => {
+    // FIXME: too many callbacks
+    const decreaseOpacity = opactiyPerMS * dt
+    const lastPathNewOpacity = paths.length > 0 ? paths[paths.length - 1].opacity - decreaseOpacity : startOpacity
+    paths = paths.reduce((newArr, curr) => {
+      switch (disappear) {
+        case DisappearType.Never:
+          curr.opacity = startOpacity
+          break
+        case DisappearType.Group:
+          curr.opacity = currentPath ? startOpacity : lastPathNewOpacity
+          break
+        case DisappearType.Independent:
+          curr.opacity -= decreaseOpacity
+          break
+        case DisappearType.Instant:
+          curr.opacity -= startOpacity
+          break
+      }
+      // @ts-ignore
+      if (curr.opacity > 0) newArr.push(curr)
+      return newArr
+    }, [])
+  }}
 >
   <svg
     class={CLASSES.fullSize}
-    stroke="rgb( var(--color) )"
+    stroke="rgb(var(--color))"
     stroke-width="4"
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-    opacity={$opacity}
+    opacity={1}
   >
     {#each paths as p, i (i)}
-      <g style:--color={p.color} stroke="rgb( var(--color) )" opacity={p.opacity}>
+      <g style:--color={p.color} stroke="rgb(var(--color))" opacity={p.opacity}>
         <path d={p.d} stroke-width="12" opacity={0.2} />
         <path d={p.d} stroke-width="8" opacity={0.33} />
         <path d={p.d} />
@@ -90,10 +121,10 @@
     {#if currentPath}
       {@const d = currentPath.getSVGPath()}
       <g>
-        <path d={d} stroke-width="12" opacity={0.2} />
-        <path d={d} stroke-width="8" opacity={0.33} />
-        <path d={d} />
-        <path d={d} stroke-width="2" opacity={0.4} stroke="#ffffff" />
+        <path {d} stroke-width="12" opacity={0.2} />
+        <path {d} stroke-width="8" opacity={0.33} />
+        <path {d} />
+        <path {d} stroke-width="2" opacity={0.4} stroke="#ffffff" />
       </g>
     {/if}
   </svg>

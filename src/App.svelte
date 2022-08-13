@@ -8,7 +8,7 @@
 
 <main id="app" class:fullsize={$isDrawMode} class:minsize={$isQuietMode}>
   {#if $isDrawMode}
-    <Canvas />
+    <Canvas disappear={1}/>
   {/if}
   <Controls />
 </main>
