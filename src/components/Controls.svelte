@@ -37,7 +37,7 @@
   }}
 >
   <Box data-tauri-drag-region={$isQuietMode ? true : null} data-drag={$isDrawMode ? true : null} class={CLASSES.size40}>
-    <GripVertical size={20} color="#313C44" opacity={0.3} />
+    <GripVertical size={20} class="text-disabled"/>
   </Box>
   <Button
     onClick={() => {
@@ -46,11 +46,11 @@
     class={CLASSES.size40}
     aria-pressed={$isDrawMode}
   >
-    <Pencil size={20} color="#313C44" />
+    <Pencil size={20} class="text-primary" />
   </Button>
   {#if $isDrawMode}
     <Button class={CLASSES.size40}>
-      <Settings size={20} color="#313C44" />
+      <Settings size={20} class="text-primary" />
     </Button>
   {/if}
   <Button
@@ -59,12 +59,12 @@
     }}
     class={CLASSES.size40}
   >
-    <X size={24} color="#ff7e40" />
+    <X size={24} class="text-danger" />
   </Button>
 </div>
 
 <style>
-  div {
+  #controls {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -74,9 +74,11 @@
     width: min-content;
     height: min-content;
     border-radius: 12px;
-    border: 4px solid #2c2d2e;
-    background-color: #fefefa;
+    border: 4px solid rgb(var(--bg));
+    background-color: rgb(var(--fg));
     padding: 12px;
-    box-shadow: 2px 2px 0px 2px #2c2d2e;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    box-shadow: 2px 2px 0px 2px rgb(var(--bg));
   }
 </style>
