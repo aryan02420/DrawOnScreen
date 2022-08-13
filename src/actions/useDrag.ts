@@ -30,7 +30,7 @@ interface ActionOptions {
 }
 
 const useDrag: Action<HTMLElement, ActionOptions> = (node, options = {}) => {
-  const { wait = 16, condition = null, preventDefault = true, stopPropagation = true, callback } = options
+  let { wait = 16, condition = null, preventDefault = true, stopPropagation = true, callback } = options
   let prevX: number, prevY: number
 
   const throttledMouseMove = throttle(mouseMove, wait, {
@@ -90,6 +90,20 @@ const useDrag: Action<HTMLElement, ActionOptions> = (node, options = {}) => {
       node.removeEventListener('mousedown', mouseDown)
       document.removeEventListener('mousemove', throttledMouseMove)
       document.removeEventListener('mouseup', mouseUp)
+    },
+    update(options = {}) {
+      let {
+        wait: _wait = 16,
+        condition: _condition = null,
+        preventDefault: _preventDefault = true,
+        stopPropagation: _stopPropagation = true,
+        callback: _callback,
+      } = options
+      wait = _wait
+      condition = _condition
+      preventDefault = _preventDefault
+      stopPropagation = _stopPropagation
+      callback = _callback
     },
   }
 }
