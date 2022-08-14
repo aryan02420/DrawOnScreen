@@ -3,14 +3,12 @@
   import useDrag, { ActionCallbackType } from '../actions/useDrag'
   import useAnimationFrame from '../actions/useAnimationFrame'
   // store
-  import { strokeDisappearLevel, StrokeDisappearLevelType } from '../store/settings'
+  import { setStrokeColorRandom, strokeColor, strokeDisappearLevel, StrokeDisappearLevelType } from '../store/settings'
   // utils
-  import { colors } from '../consts'
   import { hideCursor, showCursor } from '../utils/appwindow'
-  import pickRandom from '../utils/pickRandom'
   import { Path } from '../utils/makePath'
 
-  const color = pickRandom(colors)
+  setStrokeColorRandom()
   let currentPath: Path | null = null
   let paths: {
     d: string
@@ -27,7 +25,7 @@
 
 <div
   id="canvas"
-  style:--color={color}
+  style:--color={$strokeColor}
   use:useDrag={{
     wait: 10,
     preventDefault: true,
@@ -51,7 +49,7 @@
           paths = paths.concat([
             {
               d: currentPath?.getSVGPath() || '',
-              color: color,
+              color: $strokeColor,
               opacity: startOpacity,
             },
           ])

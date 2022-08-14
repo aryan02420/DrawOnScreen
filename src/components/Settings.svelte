@@ -1,5 +1,15 @@
 <script lang="ts">
-  import { ChevronLeft, ChevronRight, Edit3, Eraser, GripVertical, HelpCircle, Palette, Pipette } from 'lucide-svelte'
+  import {
+    ChevronLeft,
+    ChevronRight,
+    Dices,
+    Edit3,
+    Eraser,
+    GripVertical,
+    HelpCircle,
+    Palette,
+    Pipette,
+  } from 'lucide-svelte'
   import {
     StrokeWidth,
     StrokeThin,
@@ -15,12 +25,20 @@
   import Box from './Box.svelte'
   import Button from './Button.svelte'
   import Color from './Color.svelte'
-  import { colors } from '../consts'
   import {
+    setStrokeColorRandom,
+    setStrokeColorSourceRandom,
+    setStrokeColorSourceTheme,
+    setStrokeColorThemeIndexNext,
+    setStrokeColorThemeIndexPrev,
     setStrokeDisappearGroup,
     setStrokeDisappearIndependent,
     setStrokeDisappearInstant,
     setStrokeDisappearNever,
+    strokeColorRandom,
+    strokeColorSource,
+    StrokeColorSourceType,
+    strokeColorTheme,
     strokeDisappearLevel,
     StrokeDisappearLevelType,
   } from '../store/settings'
@@ -102,19 +120,41 @@
       <Palette size={20} class="text-disabled" />
     </Box>
     <div class="settings_button_group">
-      <Button class="flex-fill" aria-pressed={true}>
-        <Color color={'conic-gradient(#1ff, #11f, #f1f, #f11, #ff1, #1f1, #1ff)'} />
+      <Button
+        class="flex-fill"
+        onClick={setStrokeColorSourceRandom}
+        aria-pressed={$strokeColorSource === StrokeColorSourceType.Random}
+      >
+        <Button
+          onClick={() => {
+            setStrokeColorSourceRandom()
+            setStrokeColorRandom()
+          }}
+        >
+          <Dices size={16} class="text-disabled" />
+        </Button>
+        <Color color={`rgb(${$strokeColorRandom})`} />
       </Button>
       <Button class="flex-fill">
-        <Pipette size={16} class="text-disabled" />
         <Button>
-          <Color color={'red'} />
+          <Pipette size={16} class="text-disabled" />
         </Button>
+        <Color />
       </Button>
-      <Button>
-        <Button><ChevronLeft size={16} class="text-primary" /></Button>
-        <Color class="flex-fill" color={'red'} />
-        <Button><ChevronRight size={16} class="text-primary" /></Button>
+      <Button onClick={setStrokeColorSourceTheme} aria-pressed={$strokeColorSource === StrokeColorSourceType.Theme}>
+        <Button
+          onClick={() => {
+            setStrokeColorSourceTheme()
+            setStrokeColorThemeIndexPrev()
+          }}><ChevronLeft size={16} class="text-primary" /></Button
+        >
+        <Color class="flex-fill" color={`rgb(${$strokeColorTheme})`} />
+        <Button
+          onClick={() => {
+            setStrokeColorSourceTheme()
+            setStrokeColorThemeIndexNext()
+          }}><ChevronRight size={16} class="text-primary" /></Button
+        >
       </Button>
     </div>
   </div>
