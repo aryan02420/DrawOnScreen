@@ -1,25 +1,14 @@
 <script lang="ts">
-  // state
-  import createCountdown from '../store/factory/countdown'
   // actions
   import useDrag, { ActionCallbackType } from '../actions/useDrag'
   import useAnimationFrame from '../actions/useAnimationFrame'
+  // store
+  import { strokeDisappearLevel, StrokeDisappearLevelType } from '../store/settings'
   // utils
   import { colors } from '../consts'
   import { hideCursor, showCursor } from '../utils/appwindow'
   import pickRandom from '../utils/pickRandom'
   import { Path } from '../utils/makePath'
-
-  //types
-  const enum DisappearType {
-    Never,
-    Group,
-    Independent,
-    Instant,
-  }
-
-  // props
-  export let disappear: DisappearType = DisappearType.Group
 
   const color = pickRandom(colors)
   let currentPath: Path | null = null
@@ -81,17 +70,17 @@
     const decreaseOpacity = opactiyPerMS * dt
     const lastPathNewOpacity = paths.length > 0 ? paths[paths.length - 1].opacity - decreaseOpacity : startOpacity
     paths = paths.reduce((newArr, curr) => {
-      switch (disappear) {
-        case DisappearType.Never:
+      switch ($strokeDisappearLevel) {
+        case StrokeDisappearLevelType.Never:
           curr.opacity = startOpacity
           break
-        case DisappearType.Group:
+        case StrokeDisappearLevelType.Group:
           curr.opacity = currentPath ? startOpacity : lastPathNewOpacity
           break
-        case DisappearType.Independent:
+        case StrokeDisappearLevelType.Independent:
           curr.opacity -= decreaseOpacity
           break
-        case DisappearType.Instant:
+        case StrokeDisappearLevelType.Instant:
           curr.opacity -= startOpacity
           break
       }

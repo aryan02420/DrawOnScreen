@@ -1,15 +1,5 @@
 <script lang="ts">
-  import {
-    ChevronLeft,
-    ChevronRight,
-    Edit3,
-    Eraser,
-    GripVertical,
-    HelpCircle,
-    Lightbulb,
-    Palette,
-    Pipette,
-  } from 'lucide-svelte'
+  import { ChevronLeft, ChevronRight, Edit3, Eraser, GripVertical, HelpCircle, Palette, Pipette } from 'lucide-svelte'
   import {
     StrokeWidth,
     StrokeThin,
@@ -17,7 +7,7 @@
     StrokeHeavy,
     DisappearNever,
     DisappearGroup,
-    DisappearIndividual,
+    DisappearIndependent,
     DisappearInstant,
     StrokeSharp,
     StrokeSmooth,
@@ -26,6 +16,14 @@
   import Button from './Button.svelte'
   import Color from './Color.svelte'
   import { colors } from '../consts'
+  import {
+    setStrokeDisappearGroup,
+    setStrokeDisappearIndependent,
+    setStrokeDisappearInstant,
+    setStrokeDisappearNever,
+    strokeDisappearLevel,
+    StrokeDisappearLevelType,
+  } from '../store/settings'
 </script>
 
 <div id="settings" class="widget">
@@ -43,10 +41,31 @@
       <Eraser size={20} class="text-disabled" />
     </Box>
     <div class="settings_button_group">
-      <Button class="size-40 flex-fill"><DisappearNever size={20} class="text-primary" /></Button>
-      <Button class="size-40 flex-fill" aria-pressed={true}><DisappearGroup size={20} class="text-primary" /></Button>
-      <Button class="size-40 flex-fill"><DisappearIndividual size={20} class="text-primary" /></Button>
-      <Button class="size-40 flex-fill"><DisappearInstant size={20} class="text-primary" /></Button>
+      <Button
+        class="size-40 flex-fill"
+        onClick={setStrokeDisappearNever}
+        aria-pressed={$strokeDisappearLevel === StrokeDisappearLevelType.Never}
+      >
+        <DisappearNever size={20} class="text-primary" /></Button
+      >
+      <Button
+        class="size-40 flex-fill"
+        onClick={setStrokeDisappearGroup}
+        aria-pressed={$strokeDisappearLevel === StrokeDisappearLevelType.Group}
+        ><DisappearGroup size={20} class="text-primary" /></Button
+      >
+      <Button
+        class="size-40 flex-fill"
+        onClick={setStrokeDisappearIndependent}
+        aria-pressed={$strokeDisappearLevel === StrokeDisappearLevelType.Independent}
+        ><DisappearIndependent size={20} class="text-primary" /></Button
+      >
+      <Button
+        class="size-40 flex-fill"
+        onClick={setStrokeDisappearInstant}
+        aria-pressed={$strokeDisappearLevel === StrokeDisappearLevelType.Instant}
+        ><DisappearInstant size={20} class="text-primary" /></Button
+      >
     </div>
   </div>
   <div class="settings_row">

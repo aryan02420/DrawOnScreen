@@ -5,12 +5,12 @@
   import Settings from './components/Settings.svelte'
   // state
   import { isDrawMode, isQuietMode } from './store/state'
-  import { isSettingsVisible } from './store/settings';
+  import { isSettingsVisible } from './store/settings'
 </script>
 
 <main id="app" class:fullsize={$isDrawMode} class:minsize={$isQuietMode}>
   {#if $isDrawMode}
-    <Canvas disappear={1} />
+    <Canvas />
     {#if $isSettingsVisible}
       <Settings />
     {/if}
