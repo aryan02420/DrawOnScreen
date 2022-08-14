@@ -1,6 +1,7 @@
 import { get } from 'svelte/store'
 import { AppMode, appMode, position } from './state'
 import type { Position } from './state'
+import { closeSettings } from './settings'
 import { getWindowPosition, fullscreenWindow, setWindowPosition, unfullscreenWindow } from '../utils/appwindow'
 
 export function toggleMode() {
@@ -10,6 +11,7 @@ export function toggleMode() {
       fullscreenWindow()
       return AppMode.draw
     }
+    closeSettings()
     unfullscreenWindow().then(() => {
       setWindowPosition(get(position))
     })

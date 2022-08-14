@@ -5,7 +5,7 @@
   import useDrag, { ActionCallbackType } from '../actions/useDrag'
   import useAnimationFrame from '../actions/useAnimationFrame'
   // utils
-  import { CLASSES, colors } from '../consts'
+  import { colors } from '../consts'
   import { hideCursor, showCursor } from '../utils/appwindow'
   import pickRandom from '../utils/pickRandom'
   import { Path } from '../utils/makePath'
@@ -102,7 +102,7 @@
   }}
 >
   <svg
-    class={CLASSES.fullSize}
+    class="fullsize"
     stroke="rgb(var(--color))"
     stroke-width="4"
     fill="none"

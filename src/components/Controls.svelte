@@ -6,15 +6,16 @@
   // state
   import { isQuietMode, isDrawMode, position } from '../store/state'
   import { toggleMode, offsetPosition } from '../store/mutations'
+  import { toggleSettings, isSettingsVisible } from '../store/settings';
   // actions
   import useDrag, { ActionCallbackType } from '../actions/useDrag'
   // utils
-  import { CLASSES } from '../consts'
   import { closeWindow } from '../utils/appwindow'
 </script>
 
 <div
   id="controls"
+  class="widget"
   data-tauri-drag-region={$isQuietMode ? true : null}
   data-drag-container={$isDrawMode ? true : null}
   data-drag={$isDrawMode ? true : null}
@@ -36,20 +37,26 @@
     },
   }}
 >
-  <Box data-tauri-drag-region={$isQuietMode ? true : null} data-drag={$isDrawMode ? true : null} class={CLASSES.size40}>
-    <GripVertical size={20} class="text-disabled"/>
+  <Box data-tauri-drag-region={$isQuietMode ? true : null} data-drag={$isDrawMode ? true : null} class="size-40">
+    <GripVertical size={20} class="text-disabled" />
   </Box>
   <Button
     onClick={() => {
       toggleMode()
     }}
-    class={CLASSES.size40}
+    class="size-40"
     aria-pressed={$isDrawMode}
   >
     <Pencil size={20} class="text-primary" />
   </Button>
   {#if $isDrawMode}
-    <Button class={CLASSES.size40}>
+    <Button
+      onClick={() => {
+        toggleSettings()
+      }}
+      class="size-40"
+      aria-pressed={$isSettingsVisible}
+    >
       <Settings size={20} class="text-primary" />
     </Button>
   {/if}
@@ -57,7 +64,7 @@
     onClick={() => {
       closeWindow()
     }}
-    class={CLASSES.size40}
+    class="size-40"
   >
     <X size={24} class="text-danger" />
   </Button>
@@ -73,12 +80,5 @@
     text-align: center;
     width: min-content;
     height: min-content;
-    border-radius: 12px;
-    border: 4px solid rgb(var(--bg));
-    background-color: rgb(var(--fg));
-    padding: 12px;
-    margin-right: 4px;
-    margin-bottom: 4px;
-    box-shadow: 2px 2px 0px 2px rgb(var(--bg));
   }
 </style>

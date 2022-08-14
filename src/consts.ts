@@ -1,9 +1,3 @@
-export const CLASSES = {
-  minSize: 'minsize',
-  fullSize: 'fullsize',
-  size40: 'size-40',
-}
-
 // RRR, GGG, BBB
 export const colors = [
   '64, 99, 255',
