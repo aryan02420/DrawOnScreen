@@ -1,5 +1,6 @@
 import { exit } from '@tauri-apps/api/process'
 import { appWindow, PhysicalPosition } from '@tauri-apps/api/window'
+import { open } from '@tauri-apps/api/shell';
 
 import type { Position } from '../store/state'
 
@@ -41,4 +42,8 @@ export const hideCursor = async () => {
 
 export const showCursor = async () => {
   await appWindow.setCursorVisible(true)
+}
+
+export const openHelp = async () => {
+  open('https://github.com/aryan02420')
 }

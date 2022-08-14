@@ -1,9 +1,9 @@
-import { open } from '@tauri-apps/api/shell';
+
 import { register } from '@tauri-apps/api/globalShortcut';
 import Mousetrap from 'mousetrap'
 import App from './App.svelte'
 import { toggleMode } from './store/mutations'
-import { closeWindow } from './utils/appwindow'
+import { closeWindow, openHelp } from './utils/appwindow'
 
 const app = new App({
   target: document.body,
@@ -11,8 +11,7 @@ const app = new App({
 })
 
 Mousetrap.bind('?', () => {
-  // FIXME: does not open browser
-  open('https://github.com/aryan02420')
+  openHelp()
 })
 Mousetrap.bind('d', () => {
   toggleMode()

@@ -42,6 +42,7 @@
     strokeDisappearLevel,
     StrokeDisappearLevelType,
   } from '../store/settings'
+  import { openHelp } from '../utils/appwindow'
 </script>
 
 <div id="settings" class="widget">
@@ -50,7 +51,7 @@
       <GripVertical size={20} class="text-disabled" />
     </Box>
     <div class="flex-fill" />
-    <Button class="size-40">
+    <Button class="size-40" onClick={openHelp}>
       <HelpCircle size={20} class="text-primary" />
     </Button>
   </div>
@@ -131,13 +132,13 @@
             setStrokeColorRandom()
           }}
         >
-          <Dices size={16} class="text-disabled" />
+          <Dices size={16} class="text-primary" />
         </Button>
         <Color color={`rgb(${$strokeColorRandom})`} />
       </Button>
       <Button class="flex-fill">
         <Button>
-          <Pipette size={16} class="text-disabled" />
+          <Pipette size={16} class="text-primary" />
         </Button>
         <Color />
       </Button>
