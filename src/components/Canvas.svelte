@@ -1,6 +1,7 @@
 <script lang="ts">
   // actions
   import useDrag, { ActionCallbackType } from '../actions/useDrag'
+  import useContextMenu from '../actions/useContextMenu'
   import useAnimationFrame from '../actions/useAnimationFrame'
   // store
   import { setStrokeColorRandom, strokeColor, strokeDisappearLevel, StrokeDisappearLevelType } from '../store/settings'
@@ -62,6 +63,12 @@
           break
       }
     },
+  }}
+  use:useContextMenu={{
+    callback: () => {
+      paths = []
+      currentPath = null
+    }
   }}
   use:useAnimationFrame={(dt) => {
     // FIXME: too many callbacks
