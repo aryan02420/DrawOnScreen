@@ -1,49 +1,71 @@
 import { exit } from '@tauri-apps/api/process'
 import { appWindow, PhysicalPosition } from '@tauri-apps/api/window'
-import { open } from '@tauri-apps/api/shell';
+import { open } from '@tauri-apps/api/shell'
 
 import type { Position } from '../store/state'
 
 
 export const closeWindow = async () => {
-  await exit()
+  try {
+    await exit()
+  } catch {}
 }
 
 export const maximizeWindow = async () => {
-  await appWindow.maximize()
+  try {
+    await appWindow.maximize()
+  } catch {}
 }
 
 export const unmaximizeWindow = async () => {
-  await appWindow.unmaximize()
+  try {
+    await appWindow.unmaximize()
+  } catch {}
 }
 
 export const fullscreenWindow = async () => {
-  await appWindow.setFullscreen(true)
+  try {
+    await appWindow.setFullscreen(true)
+  } catch {}
 }
 
 export const unfullscreenWindow = async () => {
-  await appWindow.setFullscreen(false)
+  try {
+    await appWindow.setFullscreen(false)
+  } catch {}
 }
 
 export const getWindowPosition = async (): Promise<Position> => {
-  const pos = await appWindow.innerPosition()
-  return [pos.x, pos.y]
+  try {
+    const pos = await appWindow.innerPosition()
+    return [pos.x, pos.y]
+  } catch {
+    return [0, 0]
+  }
 }
 
 export const setWindowPosition = async ([x, y]: Position) => {
-  const pos = new PhysicalPosition(x, y)
-  await appWindow.setPosition(pos)
+  try {
+    const pos = new PhysicalPosition(x, y)
+    await appWindow.setPosition(pos)
+  } catch {}
 }
 
 // FIXME: doesnot work on linux
 export const hideCursor = async () => {
-  await appWindow.setCursorVisible(false)
+  try {
+    await appWindow.setCursorVisible(false)
+  } catch {}
 }
 
 export const showCursor = async () => {
-  await appWindow.setCursorVisible(true)
+  try {
+    await appWindow.setCursorVisible(true)
+  } catch {}
 }
 
 export const openHelp = async () => {
-  open('https://github.com/aryan02420')
+  try {
+    open('https://github.com/aryan02420')
+  } catch {}
 }
