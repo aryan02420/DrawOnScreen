@@ -113,6 +113,7 @@ body {
 [data-drag] {
   user-select: none;
   cursor: move;
+  touch-action: none;
 }
 
 [data-drag-container] {

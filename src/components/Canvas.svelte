@@ -132,5 +132,6 @@
     box-shadow: inset 0px 0px 0px 5px rgba(255, 255, 255, 1), inset 0px 0px 0px 10px rgba(var(--color), 0.5),
       inset 0px 0px 0px 15px rgba(var(--color), 0.4), inset 0px 0px 0px 20px rgba(var(--color), 0.3);
     cursor: crosshair;
+    touch-action: none;
   }
 </style>

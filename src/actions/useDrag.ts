@@ -23,7 +23,7 @@ type ActionCallbackParams =
 
 interface ActionOptions {
   wait?: number
-  condition?: (event: MouseEvent) => boolean
+  condition?: (event: PointerEvent) => boolean
   preventDefault?: boolean
   stopPropagation?: boolean
   callback?: (params: ActionCallbackParams) => void
@@ -32,33 +32,45 @@ interface ActionOptions {
 const useDrag: Action<HTMLElement, ActionOptions> = (node, options = {}) => {
   let { wait = 16, condition = null, preventDefault = true, stopPropagation = true, callback } = options
   let prevX: number, prevY: number
+  let currentPointer: number | null = null
 
-  const throttledMouseMove = throttle(mouseMove, wait, {
+  const throttledPointerMove = throttle(pointerMove, wait, {
     leading: true,
     trailing: true,
   })
 
-  function mouseDown(e: MouseEvent) {
-    if (condition ? condition(e) : true) {
-      if (preventDefault) e.preventDefault()
-      if (stopPropagation) e.stopPropagation()
-      document.addEventListener('mousemove', throttledMouseMove)
-      document.addEventListener('mouseup', mouseUp)
-      callback?.({
-        type: ActionCallbackType.Start,
-        payload: {
-          x: e.clientX,
-          y: e.clientY,
-        },
-      })
-      prevX = e.clientX
-      prevY = e.clientY
-    }
+  function pointerDown(e: PointerEvent) {
+    // only track first pointer that satisfies the condition
+    const validCondition = condition ? condition(e) : true
+    if (!validCondition) return
+    if (currentPointer) return
+    currentPointer = e.pointerId
+
+    if (preventDefault) e.preventDefault()
+    if (stopPropagation) e.stopPropagation()
+
+    document.addEventListener('pointermove', throttledPointerMove)
+    document.addEventListener('pointerup', pointerUp)
+
+    callback?.({
+      type: ActionCallbackType.Start,
+      payload: {
+        x: e.clientX,
+        y: e.clientY,
+      },
+    })
+
+    prevX = e.clientX
+    prevY = e.clientY
   }
 
-  function mouseUp(e: MouseEvent) {
-    document.removeEventListener('mousemove', throttledMouseMove)
-    document.removeEventListener('mouseup', mouseUp)
+  function pointerUp(e: PointerEvent) {
+    if (currentPointer !== e.pointerId) return
+    currentPointer = null
+
+    document.removeEventListener('pointermove', throttledPointerMove)
+    document.removeEventListener('pointerup', pointerUp)
+
     callback?.({
       type: ActionCallbackType.End,
       payload: {
@@ -68,9 +80,12 @@ const useDrag: Action<HTMLElement, ActionOptions> = (node, options = {}) => {
     })
   }
 
-  function mouseMove(e: MouseEvent) {
+  function pointerMove(e: PointerEvent) {
+    if (currentPointer !== e.pointerId) return
+
     const dx = e.clientX - prevX
     const dy = e.clientY - prevY
+
     callback?.({
       type: ActionCallbackType.Move,
       payload: {
@@ -80,16 +95,17 @@ const useDrag: Action<HTMLElement, ActionOptions> = (node, options = {}) => {
         dy,
       },
     })
+    
     prevX = e.clientX
     prevY = e.clientY
   }
 
-  node.addEventListener('mousedown', mouseDown)
+  node.addEventListener('pointerdown', pointerDown)
   return {
     destroy() {
-      node.removeEventListener('mousedown', mouseDown)
-      document.removeEventListener('mousemove', throttledMouseMove)
-      document.removeEventListener('mouseup', mouseUp)
+      node.removeEventListener('pointerdown', pointerDown)
+      document.removeEventListener('pointermove', throttledPointerMove)
+      document.removeEventListener('pointerup', pointerUp)
     },
     update(options = {}) {
       let {
