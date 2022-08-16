@@ -83,3 +83,97 @@ export const strokeColor = derived([strokeColorSource, strokeColorTheme, strokeC
   if (source === StrokeColorSourceType.Random) return randomColor
   return themeColor
 })
+export const enum StrokeWidthType {
+  Thin = 'Thin',
+  Medium = 'Medium',
+  Heavy = 'Heavy',
+}
+
+export type StrokeWidthLevelType = {
+  color: string
+  width: number
+  opacity: number
+}[]
+
+export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = {
+  [StrokeWidthType.Thin]: [
+    {
+      color: 'currentColor',
+      width: 12,
+      opacity: 0.2,
+    },
+    {
+      color: 'currentColor',
+      width: 8,
+      opacity: 0.33,
+    },
+    {
+      color: 'currentColor',
+      width: 4,
+      opacity: 1,
+    },
+    {
+      color: '#ffffff',
+      width: 2,
+      opacity: 0.4,
+    },
+  ],
+  [StrokeWidthType.Medium]: [
+    {
+      color: 'currentColor',
+      width: 18,
+      opacity: 0.2,
+    },
+    {
+      color: 'currentColor',
+      width: 12,
+      opacity: 0.33,
+    },
+    {
+      color: 'currentColor',
+      width: 6,
+      opacity: 1,
+    },
+    {
+      color: '#ffffff',
+      width: 3,
+      opacity: 0.4,
+    },
+  ],
+  [StrokeWidthType.Heavy]: [
+    {
+      color: 'currentColor',
+      width: 24,
+      opacity: 0.2,
+    },
+    {
+      color: 'currentColor',
+      width: 16,
+      opacity: 0.33,
+    },
+    {
+      color: 'currentColor',
+      width: 8,
+      opacity: 1,
+    },
+    {
+      color: '#ffffff',
+      width: 4,
+      opacity: 0.4,
+    },
+  ],
+}
+
+export const strokeWidth = writable<StrokeWidthType>(StrokeWidthType.Thin)
+
+export function setStrokeWidthThin() {
+  strokeWidth.set(StrokeWidthType.Thin)
+}
+export function setStrokeWidthMedium() {
+  strokeWidth.set(StrokeWidthType.Medium)
+}
+export function setStrokeWidthHeavy() {
+  strokeWidth.set(StrokeWidthType.Heavy)
+}
+
+export const strokeWidthLevel = derived(strokeWidth, (width) => StrokeWidthLevels[width])

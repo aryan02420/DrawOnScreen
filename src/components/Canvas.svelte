@@ -4,7 +4,7 @@
   import useContextMenu from '../actions/useContextMenu'
   import useAnimationFrame from '../actions/useAnimationFrame'
   // store
-  import { setStrokeColorRandom, strokeColor, strokeDisappearLevel, StrokeDisappearLevelType } from '../store/settings'
+  import { setStrokeColorRandom, strokeColor, strokeDisappearLevel, StrokeDisappearLevelType, strokeWidthLevel, StrokeWidthLevelType} from '../store/settings'
   // utils
   import { hideCursor, showCursor } from '../utils/appwindow'
   import { Path } from '../utils/makePath'
@@ -15,6 +15,7 @@
     d: string
     color: string
     opacity: number
+    strokes:StrokeWidthLevelType
   }[] = []
 
   const sustainDuration = 1000
@@ -52,6 +53,7 @@
               d: currentPath?.getSVGPath() || '',
               color: $strokeColor,
               opacity: startOpacity,
+              strokes: $strokeWidthLevel,
             },
           ])
           currentPath = null
@@ -97,28 +99,26 @@
 >
   <svg
     class="fullsize"
-    stroke="rgb(var(--color))"
-    stroke-width="4"
+    color="rgb(var(--color))"
+    stroke="currentColor"
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-    opacity={1}
+    opacity="1"
   >
     {#each paths as p, i (i)}
-      <g style:--color={p.color} stroke="rgb(var(--color))" opacity={p.opacity}>
-        <path d={p.d} stroke-width="12" opacity={0.2} />
-        <path d={p.d} stroke-width="8" opacity={0.33} />
-        <path d={p.d} />
-        <path d={p.d} stroke-width="2" opacity={0.4} stroke="#ffffff" />
+      <g style:--color={p.color} color="rgb(var(--color))" opacity={p.opacity}>
+        {#each p.strokes as strokes, i (i)}
+          <path d={p.d} stroke-width={strokes.width} opacity={strokes.opacity} stroke={strokes.color} />
+        {/each}
       </g>
     {/each}
     {#if currentPath}
       {@const d = currentPath.getSVGPath()}
       <g>
-        <path {d} stroke-width="12" opacity={0.2} />
-        <path {d} stroke-width="8" opacity={0.33} />
-        <path {d} />
-        <path {d} stroke-width="2" opacity={0.4} stroke="#ffffff" />
+        {#each $strokeWidthLevel as strokes, i (i)}
+          <path d={d} stroke-width={strokes.width} opacity={strokes.opacity} stroke={strokes.color} />
+        {/each}
       </g>
     {/if}
   </svg>

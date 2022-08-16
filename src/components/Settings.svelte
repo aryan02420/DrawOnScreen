@@ -41,6 +41,11 @@
     strokeColorTheme,
     strokeDisappearLevel,
     StrokeDisappearLevelType,
+    setStrokeWidthThin,
+    setStrokeWidthMedium,
+    setStrokeWidthHeavy,
+    strokeWidth,
+    StrokeWidthType,
   } from '../store/settings'
   import { openHelp } from '../utils/appwindow'
 </script>
@@ -105,13 +110,25 @@
       <StrokeWidth size={20} class="text-disabled" />
     </Box>
     <div class="settings_button_group">
-      <Button class="size-40 flex-fill" aria-pressed={true}>
+      <Button
+        class="size-40 flex-fill"
+        onClick={setStrokeWidthThin}
+        aria-pressed={$strokeWidth === StrokeWidthType.Thin}
+      >
         <StrokeThin size={20} class="text-primary" />
       </Button>
-      <Button class="size-40 flex-fill">
+      <Button
+        class="size-40 flex-fill"
+        onClick={setStrokeWidthMedium}
+        aria-pressed={$strokeWidth === StrokeWidthType.Medium}
+      >
         <StrokeMedium size={20} class="text-primary" />
       </Button>
-      <Button class="size-40 flex-fill">
+      <Button
+        class="size-40 flex-fill"
+        onClick={setStrokeWidthHeavy}
+        aria-pressed={$strokeWidth === StrokeWidthType.Heavy}
+      >
         <StrokeHeavy size={20} class="text-primary" />
       </Button>
     </div>
