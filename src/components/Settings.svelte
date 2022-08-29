@@ -143,35 +143,30 @@
         onClick={setStrokeColorSourceRandom}
         aria-pressed={$strokeColorSource === StrokeColorSourceType.Random}
       >
-        <Button
-          onClick={() => {
-            setStrokeColorSourceRandom()
-            setStrokeColorRandom()
-          }}
-        >
-          <Dices size={16} class="text-primary" />
+        <Button onClick={setStrokeColorRandom}>
+          <Dices size={16} strokeWidth={1.5} class="text-primary" />
         </Button>
         <Color color={`rgb(${$strokeColorRandom})`} />
       </Button>
+      <!--
       <Button class="flex-fill">
         <Button>
-          <Pipette size={16} class="text-primary" />
+          <Pipette size={16} strokeWidth={1.5} class="text-primary" />
         </Button>
         <Color />
       </Button>
-      <Button onClick={setStrokeColorSourceTheme} aria-pressed={$strokeColorSource === StrokeColorSourceType.Theme}>
-        <Button
-          onClick={() => {
-            setStrokeColorSourceTheme()
-            setStrokeColorThemeIndexPrev()
-          }}><ChevronLeft size={16} class="text-primary" /></Button
+      -->
+      <Button
+        class="flex-fill"
+        onClick={setStrokeColorSourceTheme}
+        aria-pressed={$strokeColorSource === StrokeColorSourceType.Theme}
+      >
+        <Button onClick={setStrokeColorThemeIndexPrev}
+          ><ChevronLeft size={16} strokeWidth={1.5} class="text-primary" /></Button
         >
-        <Color class="flex-fill" color={`rgb(${$strokeColorTheme})`} />
-        <Button
-          onClick={() => {
-            setStrokeColorSourceTheme()
-            setStrokeColorThemeIndexNext()
-          }}><ChevronRight size={16} class="text-primary" /></Button
+        <Color color={`rgb(${$strokeColorTheme})`} />
+        <Button onClick={setStrokeColorThemeIndexNext}
+          ><ChevronRight size={16} strokeWidth={1.5} class="text-primary" /></Button
         >
       </Button>
     </div>
@@ -198,17 +193,17 @@
     height: min-content;
   }
   /* .settings_group {
-    display: flex;
+      display: flex;
     flex-direction: column;
     gap: 0px;
     width: 100%;
     height: min-content;
   } */
-  .settings_button_group {
-    display: flex;
+    .settings_button_group {
+      display: flex;
     flex-direction: row;
     align-items: stretch;
     gap: 0px;
     width: 100%;
   }
-</style>
+  </style>
