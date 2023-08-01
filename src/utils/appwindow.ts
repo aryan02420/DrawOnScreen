@@ -1,5 +1,6 @@
 import { exit } from '@tauri-apps/api/process'
 import { appWindow, PhysicalPosition } from '@tauri-apps/api/window'
+import { type as osType } from '@tauri-apps/api/os'
 import { open } from '@tauri-apps/api/shell'
 
 import type { Position } from '../store/state'
@@ -34,6 +35,26 @@ export const unfullscreenWindow = async () => {
     await appWindow.setFullscreen(false)
   } catch {}
 }
+
+export const osSpecificFullWindow =async () => {
+  try {
+    if (await osType() == 'Darwin') {
+      await maximizeWindow()
+    } else {
+      await fullscreenWindow()
+    }
+  } catch {}
+};
+
+export const osSpecificMiniWindow =async () => {
+  try {
+    if (await osType() == 'Darwin') {
+      await unmaximizeWindow()
+    } else {
+      await unfullscreenWindow()
+    }
+  } catch {}
+};
 
 export const getWindowPosition = async (): Promise<Position> => {
   try {

@@ -8,12 +8,13 @@
   },
   "package": {
     "productName": "draw-on-screen",
-    "version": "0.6.1"
+    "version": "0.6.2"
   },
   "tauri": {
     "allowlist": {
       "all": true
     },
+    "macOSPrivateApi": true,
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
