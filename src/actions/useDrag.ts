@@ -7,19 +7,10 @@ export enum ActionCallbackType {
   End = 'End',
 }
 
-type ActionCallbackParams =
-  | {
-      type: ActionCallbackType.Start
-      payload: { x: number; y: number }
-    }
-  | {
-      type: ActionCallbackType.Move
-      payload: { x: number; y: number; dx: number; dy: number }
-    }
-  | {
-      type: ActionCallbackType.End
-      payload: { x: number; y: number }
-    }
+type ActionCallbackParams = {
+  type: ActionCallbackType
+  payload: { x: number; y: number; dx: number; dy: number }
+}
 
 interface ActionOptions {
   wait?: number
@@ -57,6 +48,8 @@ const useDrag: Action<HTMLElement, ActionOptions> = (node, options = {}) => {
       payload: {
         x: e.clientX,
         y: e.clientY,
+        dx: 0,
+        dy: 0,
       },
     })
 
@@ -76,6 +69,8 @@ const useDrag: Action<HTMLElement, ActionOptions> = (node, options = {}) => {
       payload: {
         x: e.clientX,
         y: e.clientY,
+        dx: e.clientX - prevX,
+        dy: e.clientY - prevY,
       },
     })
   }
@@ -83,16 +78,13 @@ const useDrag: Action<HTMLElement, ActionOptions> = (node, options = {}) => {
   function pointerMove(e: PointerEvent) {
     if (currentPointer !== e.pointerId) return
 
-    const dx = e.clientX - prevX
-    const dy = e.clientY - prevY
-
     callback?.({
       type: ActionCallbackType.Move,
       payload: {
         x: e.clientX,
         y: e.clientY,
-        dx,
-        dy,
+        dx: e.clientX - prevX,
+        dy: e.clientY - prevY,
       },
     })
     

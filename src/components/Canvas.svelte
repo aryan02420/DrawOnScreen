@@ -7,15 +7,16 @@
   import { setStrokeColorRandom, strokeColor, strokeDisappearLevel, StrokeDisappearLevelType, strokeWidthLevel, StrokeWidthLevelType} from '../store/settings'
   // utils
   import { hideCursor, showCursor } from '../utils/appwindow'
-  import { Path } from '../utils/makePath'
+  import { DrawSimple, DrawRect, DrawEllipse, DrawLine, DrawArrow } from '../utils/draw'
+  import type { Draw } from '../utils/draw'
 
   setStrokeColorRandom()
-  let currentPath: Path | null = null
+  let currentPath: Draw | null = null
   let paths: {
     d: string
     color: string
     opacity: number
-    strokes:StrokeWidthLevelType
+    strokes: StrokeWidthLevelType
   }[] = []
 
   const sustainDuration = 1000
@@ -36,13 +37,14 @@
     callback: ({ type, payload }) => {
       switch (type) {
         case ActionCallbackType.Start: {
-          currentPath = new Path([payload.x, payload.y])
+          currentPath = new DrawSimple()
+          currentPath.addPoint([payload.x, payload.y])
           hideCursor()
           break
         }
 
         case ActionCallbackType.Move: {
-          currentPath?.draw([payload.dx, payload.dy])
+          currentPath?.addPoint([payload.x, payload.y])
           currentPath = currentPath
           break
         }
