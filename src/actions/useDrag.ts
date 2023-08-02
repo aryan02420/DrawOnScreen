@@ -1,5 +1,5 @@
 import type { Action } from 'svelte/action'
-import throttle from 'lodash.throttle'
+import throttle from 'lodash/throttle'
 
 export enum ActionCallbackType {
   Start = 'Start',

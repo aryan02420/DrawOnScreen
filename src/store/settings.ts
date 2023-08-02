@@ -1,7 +1,6 @@
 import { writable, derived, get } from 'svelte/store'
 import { colors } from '../consts'
-import pickRandom from '../utils/pickRandom'
-
+import sample from 'lodash/sample'
 
 export const isSettingsVisible = writable(false)
 
@@ -14,7 +13,7 @@ export function closeSettings() {
 }
 
 export function toggleSettings() {
-  isSettingsVisible.update(s => !s)
+  isSettingsVisible.update((s) => !s)
 }
 
 export const enum StrokeDisappearLevelType {
@@ -71,18 +70,23 @@ export function setStrokeColorThemeIndexPrev() {
   setStrokeColorThemeIndex(get(strokeColorThemeIndex) - 1)
 }
 
-export const strokeColorRandom = writable(pickRandom(colors))
+export const strokeColorRandom = writable(sample(colors)!)
 
 export function setStrokeColorRandom() {
-  strokeColorRandom.set(pickRandom(colors))
+  strokeColorRandom.set(sample(colors)!)
 }
 
-export const strokeColorTheme = derived(strokeColorThemeIndex, index => colors[index])
+export const strokeColorTheme = derived(strokeColorThemeIndex, (index) => colors[index])
 
-export const strokeColor = derived([strokeColorSource, strokeColorTheme, strokeColorRandom], ([source, themeColor, randomColor]) => {
-  if (source === StrokeColorSourceType.Random) return randomColor
-  return themeColor
-})
+export const strokeColor = derived(
+  [strokeColorSource, strokeColorTheme, strokeColorRandom],
+  ([source, themeColor, randomColor]) => {
+    if (source === StrokeColorSourceType.Random) return randomColor
+    return themeColor
+  }
+)
+
+
 export const enum StrokeWidthType {
   Thin = 'Thin',
   Medium = 'Medium',
