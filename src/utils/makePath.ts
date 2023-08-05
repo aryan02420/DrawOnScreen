@@ -1,4 +1,6 @@
 const TAU = 2 * Math.PI
+const directions = [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75].map(a => a*Math.PI)
+// const directions = [0, 0.5, 1, 1.5].map(a => a*Math.PI)
 
 type Vec = [number, number]
 type Delta = {
@@ -81,6 +83,16 @@ export class Path {
     const combinedAngle = fastAngle(combinedVec)
     const angDiff = angleDiff(lastDelta.angle, delta.angle)
     if (combinedLen < this.lengthThresh || angDiff < this.angleThresh) {
+      const combinedDelta: Delta = {
+        vec: combinedVec,
+        len: combinedLen,
+        angle: combinedAngle,
+      }
+      this.#updatePreviousPoint(combinedDelta)
+      return
+    }
+    const minDirDiff = Math.min.apply(null, directions.map(d => angleDiff(d, combinedAngle)))
+    if (angDiff < 2 * this.angleThresh && minDirDiff < this.angleThresh) {
       const combinedDelta: Delta = {
         vec: combinedVec,
         len: combinedLen,
