@@ -70,8 +70,11 @@
   }}
   use:useContextMenu={{
     callback: () => {
-      paths = []
-      currentPath = null
+      if (currentPath) {
+        currentPath = null
+      } else {
+        paths = []
+      }
     }
   }}
   use:useAnimationFrame={(dt) => {
