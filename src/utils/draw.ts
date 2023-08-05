@@ -45,7 +45,7 @@ export class DrawRect extends Draw {
     }
     const width = endPoint[0] - startPoint[0]
     const height = endPoint[1] - startPoint[1]
-    return `M${startPoint.join(',')} l${width},0 l0,${height} l${-width},0 l0,${-height}`
+    return `M${startPoint.join(',')} l${width},0 l0,${height} l${-width},0 Z`
   }
 }
 
@@ -61,7 +61,7 @@ export class DrawEllipse extends Draw {
     }
     const radiusX = Math.abs(endPoint[0] - centerPoint[0])
     const radiusY = Math.abs(endPoint[1] - centerPoint[1])
-    return `M${centerPoint.join(',')} m${-radiusX},0 a${radiusX},${radiusY} 0 1,0 ${radiusX * 2},0 a${radiusX},${radiusY} 0 1,0 ${-radiusX * 2},0`
+    return `M${centerPoint.join(',')} m${-radiusX},0 a${radiusX},${radiusY} 0 1,0 ${radiusX * 2},0 a${radiusX},${radiusY} 0 1,0 ${-radiusX * 2},0 Z`
   }
 }
 
