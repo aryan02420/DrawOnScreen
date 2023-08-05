@@ -119,7 +119,7 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
     {
       color: '#ffffff',
       width: 2,
-      opacity: 0.4,
+      opacity: 0.5,
     },
   ],
   [StrokeWidthType.Medium]: [
@@ -163,7 +163,7 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
     {
       color: '#ffffff',
       width: 4,
-      opacity: 0.4,
+      opacity: 0.3,
     },
   ],
 }
