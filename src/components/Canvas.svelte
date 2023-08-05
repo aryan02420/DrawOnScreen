@@ -4,10 +4,9 @@
   import useContextMenu from '../actions/useContextMenu'
   import useAnimationFrame from '../actions/useAnimationFrame'
   // store
-  import { setStrokeColorRandom, strokeColor, strokeDisappearLevel, StrokeDisappearLevelType, strokeWidthLevel, StrokeWidthLevelType} from '../store/settings'
+  import { brush, setStrokeColorRandom, strokeColor, strokeDisappearLevel, StrokeDisappearLevelType, strokeWidthLevel, StrokeWidthLevelType} from '../store/settings'
   // utils
   import { hideCursor, showCursor } from '../utils/appwindow'
-  import { DrawSimple, DrawRect, DrawEllipse, DrawLine, DrawArrow } from '../utils/draw'
   import type { Draw } from '../utils/draw'
 
   setStrokeColorRandom()
@@ -37,7 +36,7 @@
     callback: ({ type, payload }) => {
       switch (type) {
         case ActionCallbackType.Start: {
-          currentPath = new DrawSimple()
+          currentPath = new $brush()
           currentPath.addPoint([payload.x, payload.y])
           hideCursor()
           break

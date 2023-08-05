@@ -1,6 +1,7 @@
 import { writable, derived, get } from 'svelte/store'
 import { colors } from '../consts'
 import sample from 'lodash/sample'
+import { Draw, DrawSimple, DrawRect, DrawEllipse, DrawLine, DrawArrow } from '../utils/draw'
 
 export const isSettingsVisible = writable(false)
 
@@ -181,3 +182,50 @@ export function setStrokeWidthHeavy() {
 }
 
 export const strokeWidthLevel = derived(strokeWidth, (width) => StrokeWidthLevels[width])
+
+
+export const enum BrushType {
+  None = 'None',
+  Smooth = 'Smooth',
+  Rect = 'Rect',
+  Ellipse = 'Ellipse',
+  Line = 'Line',
+  Arrow = 'Arrow',
+}
+
+export const BrushMap: Record<BrushType, typeof Draw> = {
+  [BrushType.None]: Draw,
+  [BrushType.Smooth]: DrawSimple,
+  [BrushType.Rect]: DrawRect,
+  [BrushType.Ellipse]: DrawEllipse,
+  [BrushType.Line]: DrawLine,
+  [BrushType.Arrow]: DrawArrow,
+}
+
+export const brushType = writable<BrushType>(BrushType.None)
+
+export function setBrushTypeNone() {
+  brushType.set(BrushType.None)
+}
+
+export function setBrushTypeSmooth() {
+  brushType.set(BrushType.Smooth)
+}
+
+export function setBrushTypeRect() {
+  brushType.set(BrushType.Rect)
+}
+
+export function setBrushTypeEllipse() {
+  brushType.set(BrushType.Ellipse)
+}
+
+export function setBrushTypeLine() {
+  brushType.set(BrushType.Line)
+}
+
+export function setBrushTypeArrow() {
+  brushType.set(BrushType.Arrow)
+}
+
+export const brush = derived(brushType, (type) => BrushMap[type])

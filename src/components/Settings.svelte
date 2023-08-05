@@ -9,6 +9,10 @@
     HelpCircle,
     Palette,
     Pipette,
+    Square,
+    Circle,
+    Minus,
+    ArrowRight,
   } from 'lucide-svelte'
   import {
     StrokeWidth,
@@ -46,6 +50,14 @@
     setStrokeWidthHeavy,
     strokeWidth,
     StrokeWidthType,
+    brushType,
+    BrushType,
+    setBrushTypeNone,
+    setBrushTypeSmooth,
+    setBrushTypeRect,
+    setBrushTypeEllipse,
+    setBrushTypeLine,
+    setBrushTypeArrow,
   } from '../store/settings'
   import { openHelp } from '../utils/appwindow'
 </script>
@@ -97,11 +109,23 @@
       <Edit3 size={20} class="text-disabled" />
     </Box>
     <div class="settings_button_group">
-      <Button class="size-40 flex-fill" aria-pressed={true}>
+      <Button class="size-40 flex-fill" onClick={setBrushTypeNone} aria-pressed={$brushType === BrushType.None}>
         <StrokeSharp size={20} class="text-primary" />
       </Button>
-      <Button class="size-40 flex-fill">
+      <Button class="size-40 flex-fill" onClick={setBrushTypeSmooth} aria-pressed={$brushType === BrushType.Smooth}>
         <StrokeSmooth size={20} class="text-primary" />
+      </Button>
+      <Button class="size-40 flex-fill" onClick={setBrushTypeRect} aria-pressed={$brushType === BrushType.Rect}>
+        <Square size={20}  class="text-primary" />
+      </Button>
+      <Button class="size-40 flex-fill" onClick={setBrushTypeEllipse} aria-pressed={$brushType === BrushType.Ellipse}>
+        <Circle size={20}  class="text-primary" />
+      </Button>
+      <Button class="size-40 flex-fill" onClick={setBrushTypeLine} aria-pressed={$brushType === BrushType.Line}>
+        <Minus size={20} class="text-primary" />
+      </Button>
+      <Button class="size-40 flex-fill" onClick={setBrushTypeArrow} aria-pressed={$brushType === BrushType.Arrow}>
+        <ArrowRight size={20} class="text-primary" />
       </Button>
     </div>
   </div>
@@ -177,7 +201,7 @@
   #settings {
     position: absolute;
     inset: 50%;
-    width: 260px;
+    width: 360px;
     height: min-content;
     transform: translate(-50%, -50%);
     display: flex;
