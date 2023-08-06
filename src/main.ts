@@ -11,111 +11,80 @@ const app = new App({
   props: {},
 })
 
-Mousetrap.bind('?', () => {
-  openHelp()
-})
-Mousetrap.bind('esc', () => {
-  toggleMode()
-})
-Mousetrap.bind('mod+w', () => {
-  closeWindow()
-})
+const keyMap = {
+  // General shortcuts
+  '?': openHelp,
+  esc: toggleMode,
+  'mod+w': closeWindow,
+  // Brush shortcuts
+  b: setBrushTypeNext,
+  'b 1': setBrushTypeNone,
+  'b 2': setBrushTypeSmooth,
+  'b 3': setBrushTypeRect,
+  'b 4': setBrushTypeEllipse,
+  'b 5': setBrushTypeLine,
+  'b 6': setBrushTypeArrow,
+  // Color shortcuts
+  c: () => {
+    setStrokeColorSourceTheme()
+    setStrokeColorThemeIndexNext()
+  },
+  'c 1': () => {
+    setStrokeColorSourceTheme()
+    setStrokeColorThemeIndex(0)
+  },
+  'c 2': () => {
+    setStrokeColorSourceTheme()
+    setStrokeColorThemeIndex(1)
+  },
+  'c 3': () => {
+    setStrokeColorSourceTheme()
+    setStrokeColorThemeIndex(2)
+  },
+  'c 4': () => {
+    setStrokeColorSourceTheme()
+    setStrokeColorThemeIndex(3)
+  },
+  'c 5': () => {
+    setStrokeColorSourceTheme()
+    setStrokeColorThemeIndex(4)
+  },
+  'c 6': () => {
+    setStrokeColorSourceTheme()
+    setStrokeColorThemeIndex(5)
+  },
+  'c 7': () => {
+    setStrokeColorSourceTheme()
+    setStrokeColorThemeIndex(6)
+  },
+  'c 8': () => {
+    setStrokeColorSourceTheme()
+    setStrokeColorThemeIndex(7)
+  },
+  'c 9': () => {
+    setStrokeColorSourceTheme()
+    setStrokeColorThemeIndex(8)
+  },
+  'c r': () => {
+    setStrokeColorSourceRandom()
+    setStrokeColorRandom()
+  },
+  // Stroke width shortcuts
+  s: setStrokeWidthNext,
+  's 1': setStrokeWidthThin,
+  's 2': setStrokeWidthMedium,
+  's 3': setStrokeWidthHeavy,
+  // Stroke disappear shortcuts
+  d: setStrokeDisappearLevelNext,
+  'd 1': setStrokeDisappearNever,
+  'd 2': setStrokeDisappearGroup,
+  'd 3': setStrokeDisappearIndependent,
+  'd 4': setStrokeDisappearInstant,
+}
 
-Mousetrap.bind('b', () => {
-  setBrushTypeNext()
-})
-Mousetrap.bind('b 1', () => {
-  setBrushTypeNone()
-})
-Mousetrap.bind('b 2', () => {
-  setBrushTypeSmooth()
-})
-Mousetrap.bind('b 3', () => {
-  setBrushTypeRect()
-})
-Mousetrap.bind('b 4', () => {
-  setBrushTypeEllipse()
-})
-Mousetrap.bind('b 5', () => {
-  setBrushTypeLine()
-})
-Mousetrap.bind('b 6', () => {
-  setBrushTypeArrow()
-})
-
-Mousetrap.bind('c', () => {
-  setStrokeColorSourceTheme()
-  setStrokeColorThemeIndexNext()
-})
-Mousetrap.bind('c 1', () => {
-  setStrokeColorSourceTheme()
-  setStrokeColorThemeIndex(0)
-})
-Mousetrap.bind('c 2', () => {
-  setStrokeColorSourceTheme()
-  setStrokeColorThemeIndex(1)
-})
-Mousetrap.bind('c 3', () => {
-  setStrokeColorSourceTheme()
-  setStrokeColorThemeIndex(2)
-})
-Mousetrap.bind('c 4', () => {
-  setStrokeColorSourceTheme()
-  setStrokeColorThemeIndex(3)
-})
-Mousetrap.bind('c 5', () => {
-  setStrokeColorSourceTheme()
-  setStrokeColorThemeIndex(4)
-})
-Mousetrap.bind('c 6', () => {
-  setStrokeColorSourceTheme()
-  setStrokeColorThemeIndex(5)
-})
-Mousetrap.bind('c 7', () => {
-  setStrokeColorSourceTheme()
-  setStrokeColorThemeIndex(6)
-})
-Mousetrap.bind('c 8', () => {
-  setStrokeColorSourceTheme()
-  setStrokeColorThemeIndex(7)
-})
-Mousetrap.bind('c 9', () => {
-  setStrokeColorSourceTheme()
-  setStrokeColorThemeIndex(8)
-})
-Mousetrap.bind('r', () => {
-  setStrokeColorSourceRandom()
-  setStrokeColorRandom()
-})
-
-Mousetrap.bind('s', () => {
-  setStrokeWidthNext()
-})
-Mousetrap.bind('s 1', () => {
-  setStrokeWidthThin()
-})
-Mousetrap.bind('s 2', () => {
-  setStrokeWidthMedium()
-})
-Mousetrap.bind('s 3', () => {
-  setStrokeWidthHeavy()
-})
-
-Mousetrap.bind('d', () => {
-  setStrokeDisappearLevelNext()
-})
-Mousetrap.bind('d 1', () => {
-  setStrokeDisappearNever()
-})
-Mousetrap.bind('d 2', () => {
-  setStrokeDisappearGroup()
-})
-Mousetrap.bind('d 3', () => {
-  setStrokeDisappearIndependent()
-})
-Mousetrap.bind('d 4', () => {
-  setStrokeDisappearInstant()
-})
+for (const [key, callback] of Object.entries(keyMap)) {
+  Mousetrap.bind(key, callback)
+}
 
 register('CommandOrControl+Shift+D', () => {
   toggleMode()
