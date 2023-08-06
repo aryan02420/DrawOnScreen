@@ -39,6 +39,12 @@ export function setStrokeDisappearInstant() {
   strokeDisappearLevel.set(StrokeDisappearLevelType.Instant)
 }
 
+export function setStrokeDisappearLevelNext() {
+  strokeDisappearLevel.update((level) => {
+    return (level + 1) % 4
+  })
+}
+
 export const enum StrokeColorSourceType {
   Random,
   Picker,
@@ -89,9 +95,9 @@ export const strokeColor = derived(
 
 
 export const enum StrokeWidthType {
-  Thin = 'Thin',
-  Medium = 'Medium',
-  Heavy = 'Heavy',
+  Thin,
+  Medium,
+  Heavy,
 }
 
 export type StrokeWidthLevelType = {
@@ -181,16 +187,22 @@ export function setStrokeWidthHeavy() {
   strokeWidth.set(StrokeWidthType.Heavy)
 }
 
+export function setStrokeWidthNext() {
+  strokeWidth.update((width) => {
+    return (width + 1) % 3
+  })
+}
+
 export const strokeWidthLevel = derived(strokeWidth, (width) => StrokeWidthLevels[width])
 
 
 export const enum BrushType {
-  None = 'None',
-  Smooth = 'Smooth',
-  Rect = 'Rect',
-  Ellipse = 'Ellipse',
-  Line = 'Line',
-  Arrow = 'Arrow',
+  None,
+  Smooth,
+  Rect,
+  Ellipse,
+  Line,
+  Arrow,
 }
 
 export const BrushMap: Record<BrushType, typeof Draw> = {
@@ -226,6 +238,12 @@ export function setBrushTypeLine() {
 
 export function setBrushTypeArrow() {
   brushType.set(BrushType.Arrow)
+}
+
+export function setBrushTypeNext() {
+  brushType.update((type) => {
+    return (type + 1) % 6
+  })
 }
 
 export const brush = derived(brushType, (type) => BrushMap[type])
