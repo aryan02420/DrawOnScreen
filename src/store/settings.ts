@@ -1,7 +1,7 @@
 import { writable, derived, get } from 'svelte/store'
 import { colors } from '../consts'
-import pickRandom from '../utils/pickRandom'
-
+import sample from 'lodash/sample'
+import { Draw, DrawSimple, DrawRect, DrawEllipse, DrawLine, DrawArrow } from '../utils/draw'
 
 export const isSettingsVisible = writable(false)
 
@@ -14,7 +14,7 @@ export function closeSettings() {
 }
 
 export function toggleSettings() {
-  isSettingsVisible.update(s => !s)
+  isSettingsVisible.update((s) => !s)
 }
 
 export const enum StrokeDisappearLevelType {
@@ -37,6 +37,12 @@ export function setStrokeDisappearIndependent() {
 }
 export function setStrokeDisappearInstant() {
   strokeDisappearLevel.set(StrokeDisappearLevelType.Instant)
+}
+
+export function setStrokeDisappearLevelNext() {
+  strokeDisappearLevel.update((level) => {
+    return (level + 1) % 4
+  })
 }
 
 export const enum StrokeColorSourceType {
@@ -71,22 +77,27 @@ export function setStrokeColorThemeIndexPrev() {
   setStrokeColorThemeIndex(get(strokeColorThemeIndex) - 1)
 }
 
-export const strokeColorRandom = writable(pickRandom(colors))
+export const strokeColorRandom = writable(sample(colors)!)
 
 export function setStrokeColorRandom() {
-  strokeColorRandom.set(pickRandom(colors))
+  strokeColorRandom.set(sample(colors)!)
 }
 
-export const strokeColorTheme = derived(strokeColorThemeIndex, index => colors[index])
+export const strokeColorTheme = derived(strokeColorThemeIndex, (index) => colors[index])
 
-export const strokeColor = derived([strokeColorSource, strokeColorTheme, strokeColorRandom], ([source, themeColor, randomColor]) => {
-  if (source === StrokeColorSourceType.Random) return randomColor
-  return themeColor
-})
+export const strokeColor = derived(
+  [strokeColorSource, strokeColorTheme, strokeColorRandom],
+  ([source, themeColor, randomColor]) => {
+    if (source === StrokeColorSourceType.Random) return randomColor
+    return themeColor
+  }
+)
+
+
 export const enum StrokeWidthType {
-  Thin = 'Thin',
-  Medium = 'Medium',
-  Heavy = 'Heavy',
+  Thin,
+  Medium,
+  Heavy,
 }
 
 export type StrokeWidthLevelType = {
@@ -115,7 +126,7 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
     {
       color: '#ffffff',
       width: 2,
-      opacity: 0.4,
+      opacity: 0.5,
     },
   ],
   [StrokeWidthType.Medium]: [
@@ -159,7 +170,7 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
     {
       color: '#ffffff',
       width: 4,
-      opacity: 0.4,
+      opacity: 0.3,
     },
   ],
 }
@@ -176,4 +187,63 @@ export function setStrokeWidthHeavy() {
   strokeWidth.set(StrokeWidthType.Heavy)
 }
 
+export function setStrokeWidthNext() {
+  strokeWidth.update((width) => {
+    return (width + 1) % 3
+  })
+}
+
 export const strokeWidthLevel = derived(strokeWidth, (width) => StrokeWidthLevels[width])
+
+
+export const enum BrushType {
+  None,
+  Smooth,
+  Rect,
+  Ellipse,
+  Line,
+  Arrow,
+}
+
+export const BrushMap: Record<BrushType, typeof Draw> = {
+  [BrushType.None]: Draw,
+  [BrushType.Smooth]: DrawSimple,
+  [BrushType.Rect]: DrawRect,
+  [BrushType.Ellipse]: DrawEllipse,
+  [BrushType.Line]: DrawLine,
+  [BrushType.Arrow]: DrawArrow,
+}
+
+export const brushType = writable<BrushType>(BrushType.None)
+
+export function setBrushTypeNone() {
+  brushType.set(BrushType.None)
+}
+
+export function setBrushTypeSmooth() {
+  brushType.set(BrushType.Smooth)
+}
+
+export function setBrushTypeRect() {
+  brushType.set(BrushType.Rect)
+}
+
+export function setBrushTypeEllipse() {
+  brushType.set(BrushType.Ellipse)
+}
+
+export function setBrushTypeLine() {
+  brushType.set(BrushType.Line)
+}
+
+export function setBrushTypeArrow() {
+  brushType.set(BrushType.Arrow)
+}
+
+export function setBrushTypeNext() {
+  brushType.update((type) => {
+    return (type + 1) % 6
+  })
+}
+
+export const brush = derived(brushType, (type) => BrushMap[type])

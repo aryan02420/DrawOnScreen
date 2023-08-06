@@ -3,9 +3,16 @@
   export let size: 'small' | 'default' = 'default'
 </script>
 
-<div {...$$restProps} style:background={color} class:small={size === 'small'} />
+<div {...$$restProps} style:background={color} class:small={size === 'small'}><slot /></div>
 
 <style>
+  div {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    justify-content: center;
+    align-items: center;
+  }
   div {
     border: 2px solid rgb(var(--invisible));
     border-radius: 24px;
