@@ -61,10 +61,6 @@ const keyMap = {
     setStrokeColorSourceTheme()
     setStrokeColorThemeIndex(7)
   },
-  'c 9': () => {
-    setStrokeColorSourceTheme()
-    setStrokeColorThemeIndex(8)
-  },
   'c r': () => {
     setStrokeColorSourceRandom()
     setStrokeColorRandom()

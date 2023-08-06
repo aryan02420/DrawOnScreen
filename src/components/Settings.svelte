@@ -171,7 +171,7 @@
         aria-pressed={$strokeColorSource === StrokeColorSourceType.Random}
       >
         <Color color={`rgb(${$strokeColorRandom})`}>
-          <Dice5 size={12} color="rgb(var(--fg)" strokeWidth={2} class="text-primary" />
+          <Dice5 size={12} color="rgb(var(--fg))" strokeWidth={3} opacity={0.5} />
         </Color>
       </Button>
       <!--
@@ -203,7 +203,7 @@
   #settings {
     position: absolute;
     inset: 50%;
-    width: 480px;
+    width: 420px;
     height: min-content;
     transform: translate(-50%, -50%);
     display: flex;
