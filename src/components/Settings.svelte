@@ -104,33 +104,7 @@
         ><DisappearInstant size={20} class="text-primary" /></Button
       >
     </div>
-  </div>
-  <div class="settings_row">
-    <Box class="size-40">
-      <Edit3 size={20} class="text-disabled" />
-    </Box>
-    <div class="settings_button_group">
-      <Button class="size-40 flex-fill" onClick={setBrushTypeNone} aria-pressed={$brushType === BrushType.None}>
-        <StrokeSharp size={20} class="text-primary" />
-      </Button>
-      <Button class="size-40 flex-fill" onClick={setBrushTypeSmooth} aria-pressed={$brushType === BrushType.Smooth}>
-        <StrokeSmooth size={20} class="text-primary" />
-      </Button>
-      <Button class="size-40 flex-fill" onClick={setBrushTypeRect} aria-pressed={$brushType === BrushType.Rect}>
-        <Square size={20}  class="text-primary" />
-      </Button>
-      <Button class="size-40 flex-fill" onClick={setBrushTypeEllipse} aria-pressed={$brushType === BrushType.Ellipse}>
-        <Circle size={20}  class="text-primary" />
-      </Button>
-      <Button class="size-40 flex-fill" onClick={setBrushTypeLine} aria-pressed={$brushType === BrushType.Line}>
-        <Minus size={20} class="text-primary" />
-      </Button>
-      <Button class="size-40 flex-fill" onClick={setBrushTypeArrow} aria-pressed={$brushType === BrushType.Arrow}>
-        <ArrowRight size={20} class="text-primary" />
-      </Button>
-    </div>
-  </div>
-  <div class="settings_row">
+    <!-- <Divider /> -->
     <Box class="size-40">
       <StrokeWidth size={20} class="text-disabled" />
     </Box>
@@ -155,6 +129,31 @@
         aria-pressed={$strokeWidth === StrokeWidthType.Heavy}
       >
         <StrokeHeavy size={20} class="text-primary" />
+      </Button>
+    </div>
+  </div>
+  <div class="settings_row">
+    <Box class="size-40">
+      <Edit3 size={20} class="text-disabled" />
+    </Box>
+    <div class="settings_button_group">
+      <Button class="size-40 flex-fill" onClick={setBrushTypeNone} aria-pressed={$brushType === BrushType.None}>
+        <StrokeSharp size={20} class="text-primary" />
+      </Button>
+      <Button class="size-40 flex-fill" onClick={setBrushTypeSmooth} aria-pressed={$brushType === BrushType.Smooth}>
+        <StrokeSmooth size={20} class="text-primary" />
+      </Button>
+      <Button class="size-40 flex-fill" onClick={setBrushTypeRect} aria-pressed={$brushType === BrushType.Rect}>
+        <Square size={20}  class="text-primary" />
+      </Button>
+      <Button class="size-40 flex-fill" onClick={setBrushTypeEllipse} aria-pressed={$brushType === BrushType.Ellipse}>
+        <Circle size={20}  class="text-primary" />
+      </Button>
+      <Button class="size-40 flex-fill" onClick={setBrushTypeLine} aria-pressed={$brushType === BrushType.Line}>
+        <Minus size={20} class="text-primary" />
+      </Button>
+      <Button class="size-40 flex-fill" onClick={setBrushTypeArrow} aria-pressed={$brushType === BrushType.Arrow}>
+        <ArrowRight size={20} class="text-primary" />
       </Button>
     </div>
   </div>
