@@ -1,7 +1,7 @@
 import { writable, derived, get } from 'svelte/store'
 import { colors } from '../consts'
 import sample from 'lodash/sample'
-import { Draw, DrawSimple, DrawRect, DrawEllipse, DrawLine, DrawArrow } from '../utils/draw'
+import { getDefaultPath, getSmoothPath, getRectPath, getEllipsePath, getLinePath, getArrowPath } from '../utils/draw'
 
 export const isSettingsVisible = writable(false)
 
@@ -205,13 +205,13 @@ export const enum BrushType {
   Arrow,
 }
 
-export const BrushMap: Record<BrushType, typeof Draw> = {
-  [BrushType.None]: Draw,
-  [BrushType.Smooth]: DrawSimple,
-  [BrushType.Rect]: DrawRect,
-  [BrushType.Ellipse]: DrawEllipse,
-  [BrushType.Line]: DrawLine,
-  [BrushType.Arrow]: DrawArrow,
+export const BrushMap: Record<BrushType, typeof getDefaultPath> = {
+  [BrushType.None]: getDefaultPath,
+  [BrushType.Smooth]: getSmoothPath,
+  [BrushType.Rect]: getRectPath,
+  [BrushType.Ellipse]: getEllipsePath,
+  [BrushType.Line]: getLinePath,
+  [BrushType.Arrow]: getArrowPath,
 }
 
 export const brushType = writable<BrushType>(BrushType.None)

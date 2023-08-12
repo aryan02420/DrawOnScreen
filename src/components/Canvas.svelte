@@ -7,7 +7,7 @@
   import { brush, setStrokeColorRandom, strokeColor, strokeDisappearLevel, StrokeDisappearLevelType, strokeWidthLevel, StrokeWidthLevelType} from '../store/settings'
   // utils
   import { hideCursor, showCursor } from '../utils/appwindow'
-  import type { Draw } from '../utils/draw'
+  import { Draw } from '../utils/draw'
 
   setStrokeColorRandom()
   let currentPath: Draw | null = null
@@ -36,7 +36,7 @@
     callback: ({ type, payload }) => {
       switch (type) {
         case ActionCallbackType.Start: {
-          currentPath = new $brush()
+          currentPath = new Draw()
           currentPath.addPoint([payload.x, payload.y])
           hideCursor()
           break
@@ -51,7 +51,7 @@
         case ActionCallbackType.End: {
           paths = paths.concat([
             {
-              d: currentPath?.getSVGPath() || '',
+              d: currentPath ? $brush(currentPath) : '',
               color: $strokeColor,
               opacity: startOpacity,
               strokes: $strokeWidthLevel,
@@ -118,7 +118,7 @@
       </g>
     {/each}
     {#if currentPath}
-      {@const d = currentPath.getSVGPath()}
+      {@const d = $brush(currentPath)}
       <g>
         {#each $strokeWidthLevel as strokes, i (i)}
           <path d={d} stroke-width={strokes.width} opacity={strokes.opacity} stroke={strokes.color} />
