@@ -110,12 +110,12 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
   [StrokeWidthType.Thin]: [
     {
       color: 'currentColor',
-      width: 12,
+      width: 8,
       opacity: 0.2,
     },
     {
       color: 'currentColor',
-      width: 8,
+      width: 6,
       opacity: 0.33,
     },
     {
@@ -128,16 +128,21 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
       width: 2,
       opacity: 0.5,
     },
+    {
+      color: '#ffffff',
+      width: 1,
+      opacity: 0.25,
+    },
   ],
   [StrokeWidthType.Medium]: [
     {
       color: 'currentColor',
-      width: 18,
+      width: 12,
       opacity: 0.2,
     },
     {
       color: 'currentColor',
-      width: 12,
+      width: 9,
       opacity: 0.33,
     },
     {
@@ -150,16 +155,21 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
       width: 3,
       opacity: 0.4,
     },
+    {
+      color: '#ffffff',
+      width: 2,
+      opacity: 0.2,
+    },
   ],
   [StrokeWidthType.Heavy]: [
     {
       color: 'currentColor',
-      width: 24,
+      width: 14,
       opacity: 0.2,
     },
     {
       color: 'currentColor',
-      width: 16,
+      width: 12,
       opacity: 0.33,
     },
     {
@@ -171,6 +181,11 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
       color: '#ffffff',
       width: 4,
       opacity: 0.3,
+    },
+    {
+      color: '#ffffff',
+      width: 2,
+      opacity: 0.2,
     },
   ],
 }
