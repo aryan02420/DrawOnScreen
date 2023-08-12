@@ -1,5 +1,6 @@
 import simplifySvgPath from '@luncheon/simplify-svg-path'
 import simplify from 'simplify-js'
+import { clamp } from 'lodash'
 
 type Point = [number, number]
 
@@ -92,8 +93,12 @@ export class DrawArrow extends Draw {
     }
     const angle = Math.atan2(endPoint[1] - startPoint[1], endPoint[0] - startPoint[0])
     const length = Math.hypot(endPoint[0] - startPoint[0], endPoint[1] - startPoint[1])
-    const arrowSize = Math.max(10, length / 6)
+    const arrowSize = clamp(length/10, 12, 64)
     const arrowAngle = Math.PI / 6
+    const lineEndPoint = [
+      endPoint[0] - arrowSize * Math.sqrt(3/4) * Math.cos(angle),
+      endPoint[1] - arrowSize * Math.sqrt(3/4) * Math.sin(angle),
+    ]
     const arrowPoint1 = [
       endPoint[0] - arrowSize * Math.cos(angle + arrowAngle),
       endPoint[1] - arrowSize * Math.sin(angle + arrowAngle),
@@ -102,7 +107,7 @@ export class DrawArrow extends Draw {
       endPoint[0] - arrowSize * Math.cos(angle - arrowAngle),
       endPoint[1] - arrowSize * Math.sin(angle - arrowAngle),
     ]
-    return `M${startPoint.join(',')} L${endPoint.join(',')} L${arrowPoint1.join(',')} L${arrowPoint2.join(',')} L${endPoint.join(',')}`
+    return `M${startPoint.join(',')} L${lineEndPoint.join(',')} M${arrowPoint1.join(',')} L${arrowPoint2.join(',')} L${endPoint.join(',')} Z`
   }
 }
 
