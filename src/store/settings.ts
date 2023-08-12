@@ -190,7 +190,7 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
   ],
 }
 
-export const strokeWidth = writable<StrokeWidthType>(StrokeWidthType.Thin)
+export const strokeWidth = writable<StrokeWidthType>(StrokeWidthType.Medium)
 
 export function setStrokeWidthThin() {
   strokeWidth.set(StrokeWidthType.Thin)
