@@ -11,3 +11,5 @@ export { default as DisappearNever } from './DisappearNever.svelte'
 
 export { default as StrokeSmooth } from './StrokeSmooth.svelte'
 export { default as StrokeSharp } from './StrokeSharp.svelte'
+
+export { default as BrushLaser } from './BrushLaser.svelte'

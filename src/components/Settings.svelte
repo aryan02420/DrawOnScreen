@@ -26,6 +26,7 @@
     DisappearInstant,
     StrokeSharp,
     StrokeSmooth,
+    BrushLaser,
   } from './Icons'
   import Box from './Box.svelte'
   import Button from './Button.svelte'
@@ -60,6 +61,7 @@
     setBrushTypeEllipse,
     setBrushTypeLine,
     setBrushTypeArrow,
+    setBrushTypeLaser,
   } from '../store/settings'
   import { openHelp } from '../utils/appwindow'
   import { colors } from '../consts'
@@ -162,6 +164,9 @@
       </Button>
       <Button class="size-40 flex-fill" onClick={setBrushTypeArrow} aria-pressed={$brushType === BrushType.Arrow}>
         <ArrowRight size={20} class="text-primary" />
+      </Button>
+      <Button class="size-40 flex-fill" onClick={setBrushTypeLaser} aria-pressed={$brushType === BrushType.Laser}>
+        <BrushLaser size={20} class="text-primary" />
       </Button>
     </div>
   </div>

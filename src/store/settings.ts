@@ -1,7 +1,7 @@
 import { writable, derived, get } from 'svelte/store'
 import { colors } from '../consts'
 import sample from 'lodash/sample'
-import { getDefaultPath, getSmoothPath, getRectPath, getEllipsePath, getLinePath, getArrowPath } from '../utils/draw'
+import { getDefaultPath, getSmoothPath, getRectPath, getEllipsePath, getLinePath, getArrowPath, getLaserPath } from '../utils/draw'
 
 export const isSettingsVisible = writable(false)
 
@@ -222,6 +222,7 @@ export const enum BrushType {
   Ellipse,
   Line,
   Arrow,
+  Laser,
 }
 
 export const BrushMap: Record<BrushType, typeof getDefaultPath> = {
@@ -231,6 +232,7 @@ export const BrushMap: Record<BrushType, typeof getDefaultPath> = {
   [BrushType.Ellipse]: getEllipsePath,
   [BrushType.Line]: getLinePath,
   [BrushType.Arrow]: getArrowPath,
+  [BrushType.Laser]: getLaserPath,
 }
 
 export const brushType = writable<BrushType>(BrushType.None)
@@ -259,9 +261,13 @@ export function setBrushTypeArrow() {
   brushType.set(BrushType.Arrow)
 }
 
+export function setBrushTypeLaser() {
+  brushType.set(BrushType.Laser)
+}
+
 export function setBrushTypeNext() {
   brushType.update((type) => {
-    return (type + 1) % 6
+    return (type + 1) % 7
   })
 }
 

@@ -104,6 +104,14 @@ export function getArrowPath(draw: Draw) {
   return `M${startPoint.join(',')} L${lineEndPoint.join(',')} M${arrowPoint1.join(',')} L${arrowPoint2.join(',')} L${endPoint.join(',')} Z`
 }
 
+export function getLaserPath(draw: Draw) {
+  const endPoint = draw.points.at(-1)
+  if (!endPoint) {
+    return ``
+  }
+  return `M${endPoint.join(',')} l0,0`
+}
+
 export function getTextPath(draw: Draw) {
   const startPoint = draw.points.at(0)
   const endPoint = draw.points.at(-1)
