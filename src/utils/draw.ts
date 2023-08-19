@@ -50,17 +50,19 @@ export function getRectPath(draw: Draw) {
 }
 
 export function getEllipsePath(draw: Draw) {
-  const centerPoint = draw.points.at(0)
+  const startPoint = draw.points.at(0)
   const endPoint = draw.points.at(-1)
-  if (!centerPoint) {
+  if (!startPoint) {
     return ``
   }
-  if (!endPoint || centerPoint === endPoint) {
-    return `M${centerPoint.join(',')} l0,0`
+  if (!endPoint || startPoint === endPoint) {
+    return `M${startPoint.join(',')} l0,0`
   }
-  const radiusX = Math.abs(endPoint[0] - centerPoint[0])
-  const radiusY = Math.abs(endPoint[1] - centerPoint[1])
-  return `M${centerPoint.join(',')} m${-radiusX},0 a${radiusX},${radiusY} 0 1,0 ${radiusX * 2},0 a${radiusX},${radiusY} 0 1,0 ${-radiusX * 2},0 Z`
+  const width = endPoint[0] - startPoint[0]
+  const height = endPoint[1] - startPoint[1]
+  const centerX = startPoint[0] + width / 2
+  const centerY = startPoint[1] + height / 2
+  return `M${centerX},${centerY} m${-width / 2},0 a${width / 2},${height / 2} 0 1,0 ${width},0 a${width / 2},${height / 2} 0 1,0 ${-width},0`
 }
 
 export function getLinePath(draw: Draw) {
