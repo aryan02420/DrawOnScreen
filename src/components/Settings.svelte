@@ -22,6 +22,7 @@
     DisappearNever,
     DisappearGroup,
     DisappearIndependent,
+    DisappearSingle,
     DisappearInstant,
     StrokeSharp,
     StrokeSmooth,
@@ -37,6 +38,7 @@
     setStrokeColorThemeIndex,
     setStrokeDisappearGroup,
     setStrokeDisappearIndependent,
+    setStrokeDisappearSingle,
     setStrokeDisappearInstant,
     setStrokeDisappearNever,
     strokeColorRandom,
@@ -96,6 +98,12 @@
         onClick={setStrokeDisappearIndependent}
         aria-pressed={$strokeDisappearLevel === StrokeDisappearLevelType.Independent}
         ><DisappearIndependent size={20} class="text-primary" /></Button
+      >
+      <Button
+        class="size-40 flex-fill"
+        onClick={setStrokeDisappearSingle}
+        aria-pressed={$strokeDisappearLevel === StrokeDisappearLevelType.Single}
+        ><DisappearSingle size={20} class="text-primary" /></Button
       >
       <Button
         class="size-40 flex-fill"
@@ -203,7 +211,7 @@
   #settings {
     position: absolute;
     inset: 50%;
-    width: 420px;
+    width: 460px;
     height: min-content;
     transform: translate(-50%, -50%);
     display: flex;

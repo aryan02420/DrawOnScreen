@@ -3,7 +3,7 @@ import { register } from '@tauri-apps/api/globalShortcut';
 import Mousetrap from 'mousetrap'
 import App from './App.svelte'
 import { toggleMode } from './store/mutations'
-import { setBrushTypeArrow, setBrushTypeEllipse, setBrushTypeLine, setBrushTypeNext, setBrushTypeNone, setBrushTypeRect, setBrushTypeSmooth, setStrokeColorRandom, setStrokeColorSourceRandom, setStrokeColorSourceTheme, setStrokeColorThemeIndex, setStrokeColorThemeIndexNext, setStrokeDisappearGroup, setStrokeDisappearIndependent, setStrokeDisappearInstant, setStrokeDisappearLevelNext, setStrokeDisappearNever, setStrokeWidthHeavy, setStrokeWidthMedium, setStrokeWidthNext, setStrokeWidthThin } from './store/settings';
+import { setBrushTypeArrow, setBrushTypeEllipse, setBrushTypeLine, setBrushTypeNext, setBrushTypeNone, setBrushTypeRect, setBrushTypeSmooth, setStrokeColorRandom, setStrokeColorSourceRandom, setStrokeColorSourceTheme, setStrokeColorThemeIndex, setStrokeColorThemeIndexNext, setStrokeDisappearGroup, setStrokeDisappearIndependent, setStrokeDisappearSingle, setStrokeDisappearInstant, setStrokeDisappearLevelNext, setStrokeDisappearNever, setStrokeWidthHeavy, setStrokeWidthMedium, setStrokeWidthNext, setStrokeWidthThin } from './store/settings';
 import { closeWindow, openHelp } from './utils/appwindow'
 
 const app = new App({
@@ -75,7 +75,8 @@ const keyMap = {
   'd 1': setStrokeDisappearNever,
   'd 2': setStrokeDisappearGroup,
   'd 3': setStrokeDisappearIndependent,
-  'd 4': setStrokeDisappearInstant,
+  'd 4': setStrokeDisappearSingle,
+  'd 5': setStrokeDisappearInstant,
 }
 
 for (const [key, callback] of Object.entries(keyMap)) {

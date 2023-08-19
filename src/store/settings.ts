@@ -21,6 +21,7 @@ export const enum StrokeDisappearLevelType {
   Never,
   Group,
   Independent,
+  Single,
   Instant,
 }
 
@@ -35,13 +36,16 @@ export function setStrokeDisappearGroup() {
 export function setStrokeDisappearIndependent() {
   strokeDisappearLevel.set(StrokeDisappearLevelType.Independent)
 }
+export function setStrokeDisappearSingle() {
+  strokeDisappearLevel.set(StrokeDisappearLevelType.Single)
+}
 export function setStrokeDisappearInstant() {
   strokeDisappearLevel.set(StrokeDisappearLevelType.Instant)
 }
 
 export function setStrokeDisappearLevelNext() {
   strokeDisappearLevel.update((level) => {
-    return (level + 1) % 4
+    return (level + 1) % 5
   })
 }
 
