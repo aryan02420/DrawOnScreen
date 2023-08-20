@@ -79,31 +79,31 @@ export function getLinePath(draw: Draw) {
 
 export function getArrowPath(draw: Draw) {
   console.log(draw.points)
-  const startPoint = draw.points.at(0)
-  const endPoint = draw.points.at(-1)
-  if (!startPoint) {
+  const arrowHead = draw.points.at(0)
+  const arrowTail = draw.points.at(-1)
+  if (!arrowHead) {
     return ``
   }
-  if (!endPoint || startPoint === endPoint) {
-    return `M${startPoint.join(',')} l0,0`
+  if (!arrowTail || arrowHead === arrowTail) {
+    return `M${arrowHead.join(',')} l0,0`
   }
-  const angle = Math.atan2(endPoint[1] - startPoint[1], endPoint[0] - startPoint[0])
-  const length = Math.hypot(endPoint[0] - startPoint[0], endPoint[1] - startPoint[1])
+  const angle = Math.atan2(arrowHead[1] - arrowTail[1], arrowHead[0] - arrowTail[0])
+  const length = Math.hypot(arrowHead[0] - arrowTail[0], arrowHead[1] - arrowTail[1])
   const arrowSize = clamp(length / 10, 12, 64)
   const arrowAngle = Math.PI / 6
-  const lineEndPoint = [
-    endPoint[0] - arrowSize * Math.sqrt(3 / 4) * Math.cos(angle),
-    endPoint[1] - arrowSize * Math.sqrt(3 / 4) * Math.sin(angle),
+  const arrowHeadBase = [
+    arrowHead[0] - arrowSize * Math.sqrt(3 / 4) * Math.cos(angle),
+    arrowHead[1] - arrowSize * Math.sqrt(3 / 4) * Math.sin(angle),
   ]
   const arrowPoint1 = [
-    endPoint[0] - arrowSize * Math.cos(angle + arrowAngle),
-    endPoint[1] - arrowSize * Math.sin(angle + arrowAngle),
+    arrowHead[0] - arrowSize * Math.cos(angle + arrowAngle),
+    arrowHead[1] - arrowSize * Math.sin(angle + arrowAngle),
   ]
   const arrowPoint2 = [
-    endPoint[0] - arrowSize * Math.cos(angle - arrowAngle),
-    endPoint[1] - arrowSize * Math.sin(angle - arrowAngle),
+    arrowHead[0] - arrowSize * Math.cos(angle - arrowAngle),
+    arrowHead[1] - arrowSize * Math.sin(angle - arrowAngle),
   ]
-  return `M${startPoint.join(',')} L${lineEndPoint.join(',')} M${arrowPoint1.join(',')} L${arrowPoint2.join(',')} L${endPoint.join(',')} Z`
+  return `M${arrowTail.join(',')} L${arrowHeadBase.join(',')} M${arrowPoint1.join(',')} L${arrowPoint2.join(',')} L${arrowHead.join(',')} Z`
 }
 
 export function getLaserPath(draw: Draw) {
