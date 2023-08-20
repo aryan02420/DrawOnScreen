@@ -22,9 +22,11 @@
     DisappearNever,
     DisappearGroup,
     DisappearIndependent,
+    DisappearSingle,
     DisappearInstant,
     StrokeSharp,
     StrokeSmooth,
+    BrushLaser,
   } from './Icons'
   import Box from './Box.svelte'
   import Button from './Button.svelte'
@@ -37,6 +39,7 @@
     setStrokeColorThemeIndex,
     setStrokeDisappearGroup,
     setStrokeDisappearIndependent,
+    setStrokeDisappearSingle,
     setStrokeDisappearInstant,
     setStrokeDisappearNever,
     strokeColorRandom,
@@ -58,6 +61,7 @@
     setBrushTypeEllipse,
     setBrushTypeLine,
     setBrushTypeArrow,
+    setBrushTypeLaser,
   } from '../store/settings'
   import { openHelp } from '../utils/appwindow'
   import { colors } from '../consts'
@@ -96,6 +100,12 @@
         onClick={setStrokeDisappearIndependent}
         aria-pressed={$strokeDisappearLevel === StrokeDisappearLevelType.Independent}
         ><DisappearIndependent size={20} class="text-primary" /></Button
+      >
+      <Button
+        class="size-40 flex-fill"
+        onClick={setStrokeDisappearSingle}
+        aria-pressed={$strokeDisappearLevel === StrokeDisappearLevelType.Single}
+        ><DisappearSingle size={20} class="text-primary" /></Button
       >
       <Button
         class="size-40 flex-fill"
@@ -155,6 +165,9 @@
       <Button class="size-40 flex-fill" onClick={setBrushTypeArrow} aria-pressed={$brushType === BrushType.Arrow}>
         <ArrowRight size={20} class="text-primary" />
       </Button>
+      <Button class="size-40 flex-fill" onClick={setBrushTypeLaser} aria-pressed={$brushType === BrushType.Laser}>
+        <BrushLaser size={20} class="text-primary" />
+      </Button>
     </div>
   </div>
   <div class="settings_row">
@@ -203,7 +216,7 @@
   #settings {
     position: absolute;
     inset: 50%;
-    width: 420px;
+    width: 460px;
     height: min-content;
     transform: translate(-50%, -50%);
     display: flex;

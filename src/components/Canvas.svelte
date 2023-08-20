@@ -7,16 +7,18 @@
   import { brush, setStrokeColorRandom, strokeColor, strokeDisappearLevel, StrokeDisappearLevelType, strokeWidthLevel, StrokeWidthLevelType} from '../store/settings'
   // utils
   import { hideCursor, showCursor } from '../utils/appwindow'
-  import type { Draw } from '../utils/draw'
+  import { Draw } from '../utils/draw'
 
-  setStrokeColorRandom()
-  let currentPath: Draw | null = null
-  let paths: {
+  type Path = {
     d: string
     color: string
     opacity: number
     strokes: StrokeWidthLevelType
-  }[] = []
+  }
+
+  setStrokeColorRandom()
+  let currentPath: Draw | null = null
+  let paths: Path[] = []
 
   const sustainDuration = 1000
   const decayDuration = 2000
@@ -36,7 +38,7 @@
     callback: ({ type, payload }) => {
       switch (type) {
         case ActionCallbackType.Start: {
-          currentPath = new $brush()
+          currentPath = new Draw()
           currentPath.addPoint([payload.x, payload.y])
           hideCursor()
           break
@@ -51,7 +53,7 @@
         case ActionCallbackType.End: {
           paths = paths.concat([
             {
-              d: currentPath?.getSVGPath() || '',
+              d: currentPath ? $brush(currentPath) : '',
               color: $strokeColor,
               opacity: startOpacity,
               strokes: $strokeWidthLevel,
@@ -80,23 +82,26 @@
     // FIXME: too many callbacks
     const decreaseOpacity = opactiyPerMS * dt
     const lastPathNewOpacity = paths.length > 0 ? paths[paths.length - 1].opacity - decreaseOpacity : startOpacity
-    paths = paths.reduce((newArr, curr) => {
+    paths = paths.reduce((newArr, currPath, currIndex) => {
       switch ($strokeDisappearLevel) {
         case StrokeDisappearLevelType.Never:
-          curr.opacity = startOpacity
+          currPath.opacity = startOpacity
           break
         case StrokeDisappearLevelType.Group:
-          curr.opacity = currentPath ? startOpacity : lastPathNewOpacity
+          currPath.opacity = currentPath ? startOpacity : lastPathNewOpacity
           break
         case StrokeDisappearLevelType.Independent:
-          curr.opacity -= decreaseOpacity
+          currPath.opacity -= decreaseOpacity
+          break
+        case StrokeDisappearLevelType.Single:
+          currPath.opacity = currentPath ? 0 : lastPathNewOpacity
           break
         case StrokeDisappearLevelType.Instant:
-          curr.opacity -= startOpacity
+          currPath.opacity = 0
           break
       }
       // @ts-ignore
-      if (curr.opacity > 0) newArr.push(curr)
+      if (currPath.opacity > 0) newArr.push(currPath)
       return newArr
     }, [])
   }}
@@ -118,7 +123,7 @@
       </g>
     {/each}
     {#if currentPath}
-      {@const d = currentPath.getSVGPath()}
+      {@const d = $brush(currentPath)}
       <g>
         {#each $strokeWidthLevel as strokes, i (i)}
           <path d={d} stroke-width={strokes.width} opacity={strokes.opacity} stroke={strokes.color} />

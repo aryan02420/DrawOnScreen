@@ -1,7 +1,7 @@
 import { writable, derived, get } from 'svelte/store'
 import { colors } from '../consts'
 import sample from 'lodash/sample'
-import { Draw, DrawSimple, DrawRect, DrawEllipse, DrawLine, DrawArrow } from '../utils/draw'
+import { getDefaultPath, getSmoothPath, getRectPath, getEllipsePath, getLinePath, getArrowPath, getLaserPath } from '../utils/draw'
 
 export const isSettingsVisible = writable(false)
 
@@ -21,6 +21,7 @@ export const enum StrokeDisappearLevelType {
   Never,
   Group,
   Independent,
+  Single,
   Instant,
 }
 
@@ -35,13 +36,16 @@ export function setStrokeDisappearGroup() {
 export function setStrokeDisappearIndependent() {
   strokeDisappearLevel.set(StrokeDisappearLevelType.Independent)
 }
+export function setStrokeDisappearSingle() {
+  strokeDisappearLevel.set(StrokeDisappearLevelType.Single)
+}
 export function setStrokeDisappearInstant() {
   strokeDisappearLevel.set(StrokeDisappearLevelType.Instant)
 }
 
 export function setStrokeDisappearLevelNext() {
   strokeDisappearLevel.update((level) => {
-    return (level + 1) % 4
+    return (level + 1) % 5
   })
 }
 
@@ -110,12 +114,12 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
   [StrokeWidthType.Thin]: [
     {
       color: 'currentColor',
-      width: 12,
+      width: 8,
       opacity: 0.2,
     },
     {
       color: 'currentColor',
-      width: 8,
+      width: 6,
       opacity: 0.33,
     },
     {
@@ -128,16 +132,21 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
       width: 2,
       opacity: 0.5,
     },
+    {
+      color: '#ffffff',
+      width: 1,
+      opacity: 0.25,
+    },
   ],
   [StrokeWidthType.Medium]: [
     {
       color: 'currentColor',
-      width: 18,
+      width: 12,
       opacity: 0.2,
     },
     {
       color: 'currentColor',
-      width: 12,
+      width: 9,
       opacity: 0.33,
     },
     {
@@ -150,16 +159,21 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
       width: 3,
       opacity: 0.4,
     },
+    {
+      color: '#ffffff',
+      width: 2,
+      opacity: 0.2,
+    },
   ],
   [StrokeWidthType.Heavy]: [
     {
       color: 'currentColor',
-      width: 24,
+      width: 14,
       opacity: 0.2,
     },
     {
       color: 'currentColor',
-      width: 16,
+      width: 12,
       opacity: 0.33,
     },
     {
@@ -172,10 +186,15 @@ export const StrokeWidthLevels: Record<StrokeWidthType, StrokeWidthLevelType> = 
       width: 4,
       opacity: 0.3,
     },
+    {
+      color: '#ffffff',
+      width: 2,
+      opacity: 0.2,
+    },
   ],
 }
 
-export const strokeWidth = writable<StrokeWidthType>(StrokeWidthType.Thin)
+export const strokeWidth = writable<StrokeWidthType>(StrokeWidthType.Medium)
 
 export function setStrokeWidthThin() {
   strokeWidth.set(StrokeWidthType.Thin)
@@ -203,15 +222,17 @@ export const enum BrushType {
   Ellipse,
   Line,
   Arrow,
+  Laser,
 }
 
-export const BrushMap: Record<BrushType, typeof Draw> = {
-  [BrushType.None]: Draw,
-  [BrushType.Smooth]: DrawSimple,
-  [BrushType.Rect]: DrawRect,
-  [BrushType.Ellipse]: DrawEllipse,
-  [BrushType.Line]: DrawLine,
-  [BrushType.Arrow]: DrawArrow,
+export const BrushMap: Record<BrushType, typeof getDefaultPath> = {
+  [BrushType.None]: getDefaultPath,
+  [BrushType.Smooth]: getSmoothPath,
+  [BrushType.Rect]: getRectPath,
+  [BrushType.Ellipse]: getEllipsePath,
+  [BrushType.Line]: getLinePath,
+  [BrushType.Arrow]: getArrowPath,
+  [BrushType.Laser]: getLaserPath,
 }
 
 export const brushType = writable<BrushType>(BrushType.None)
@@ -240,9 +261,13 @@ export function setBrushTypeArrow() {
   brushType.set(BrushType.Arrow)
 }
 
+export function setBrushTypeLaser() {
+  brushType.set(BrushType.Laser)
+}
+
 export function setBrushTypeNext() {
   brushType.update((type) => {
-    return (type + 1) % 6
+    return (type + 1) % 7
   })
 }
 
