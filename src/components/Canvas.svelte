@@ -53,7 +53,7 @@
         case ActionCallbackType.End: {
           paths = paths.concat([
             {
-              d: currentPath ? $brush(currentPath) : '',
+              d: currentPath ? $brush(currentPath, { snap: true, altOrigin: true }) : '',
               color: $strokeColor,
               opacity: startOpacity,
               strokes: $strokeWidthLevel,
@@ -123,7 +123,7 @@
       </g>
     {/each}
     {#if currentPath}
-      {@const d = $brush(currentPath)}
+      {@const d = $brush(currentPath, { snap: true, altOrigin: true })}
       <g>
         {#each $strokeWidthLevel as strokes, i (i)}
           <path d={d} stroke-width={strokes.width} opacity={strokes.opacity} stroke={strokes.color} />

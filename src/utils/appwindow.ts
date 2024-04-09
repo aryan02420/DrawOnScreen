@@ -56,6 +56,12 @@ export const osSpecificMiniWindow =async () => {
   } catch {}
 };
 
+// export const unfocusWindow = async () => {
+//   try {
+//     await appWindow.
+//   } catch {}
+// }
+
 export const getWindowPosition = async (): Promise<Position> => {
   try {
     const pos = await appWindow.innerPosition()
