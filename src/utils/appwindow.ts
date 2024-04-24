@@ -1,10 +1,9 @@
 import { exit } from '@tauri-apps/api/process'
-import { appWindow, PhysicalPosition } from '@tauri-apps/api/window'
+import { appWindow, LogicalPosition, PhysicalPosition } from '@tauri-apps/api/window'
 import { type as osType } from '@tauri-apps/api/os'
 import { open } from '@tauri-apps/api/shell'
 
 import type { Position } from '../store/state'
-
 
 export const closeWindow = async () => {
   try {
@@ -67,7 +66,7 @@ export const getWindowPosition = async (): Promise<Position> => {
 
 export const setWindowPosition = async ([x, y]: Position) => {
   try {
-    const pos = new PhysicalPosition(x, y)
+    const pos = new LogicalPosition(x, y)
     await appWindow.setPosition(pos)
   } catch {}
 }
