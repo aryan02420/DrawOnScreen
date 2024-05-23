@@ -16,3 +16,12 @@
 ## Installation
 
 // TODO
+
+### Mac OS
+
+```sh
+# enable installing apps from unknown developers
+sudo spctl --master-disable
+# fix broken binary (optional)
+xattr -cr /Applications/draw-on-screen.app
+```
